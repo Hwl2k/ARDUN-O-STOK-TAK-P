@@ -1,246 +1,447 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AtölyeAI Pro</title>
-<style>
-*{box-sizing:border-box}
-:root{--bg:#f4f6fb;--card:#fff;--text:#111827;--muted:#6b7280;--line:#e5e7eb;--main:#2563eb;--main2:#7c3aed;--soft:#f3f4f6}
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
-.hidden{display:none!important}
-button{border:0;border-radius:12px;padding:12px 14px;background:linear-gradient(90deg,var(--main),var(--main2));color:white;font-weight:800;cursor:pointer}
-input,select{width:100%;padding:13px;border:1px solid var(--line);border-radius:12px;background:white;color:var(--text);margin:7px 0}
-.login{min-height:100vh;display:grid;grid-template-columns:1fr 430px;gap:30px;padding:45px;background:linear-gradient(135deg,#eef2ff,#f8fafc)}
-.hero{display:flex;flex-direction:column;justify-content:center;padding-left:40px}
-.hero h1{font-size:64px;margin:0}.hero span{color:var(--main2)}.hero p{color:var(--muted);font-size:22px}
-.login-card,.panel,.card,.sidebar,.topbar,.item{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 30px #0001}
-.login-card{padding:32px;align-self:center}
-.app{display:flex;min-height:100vh}
-.sidebar{width:260px;border-radius:0;padding:18px;position:sticky;top:0;height:100vh;overflow:auto}
-.sidebar button{width:100%;margin:6px 0;text-align:left;background:var(--soft);color:var(--text)}
-.sidebar button:hover{background:var(--main);color:white}
-.main{flex:1;padding:18px}
-.topbar{padding:14px;display:flex;gap:12px;align-items:center;margin-bottom:18px}
-.topbar input{max-width:420px}.topbar button{width:auto}
-.profile{margin-left:auto;display:flex;gap:10px;align-items:center}
-.avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;background:var(--soft)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.card{padding:18px}.card b{font-size:30px;display:block;margin-top:8px}.card small{color:var(--muted)}
-.grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:14px}
-.panel{padding:18px}
-.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.list{display:grid;gap:10px;margin-top:12px}
-.item{padding:14px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.badge{display:inline-block;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:800}
-.ok{background:#dcfce7;color:#166534}.warn{background:#fef3c7;color:#92400e}.bad{background:#fee2e2;color:#991b1b}
-.small{width:auto;padding:8px 10px}.danger{background:#dc2626}.success{background:#16a34a}
-.photo{width:70px;height:55px;border-radius:10px;object-fit:cover}
-.ai-msg{background:var(--soft);padding:12px;border-radius:12px;margin:8px 0}
-@media(max-width:900px){.login{grid-template-columns:1fr}.hero{display:none}.app{flex-direction:column}.sidebar{width:100%;height:auto;position:static}.stats,.grid,.form-grid{grid-template-columns:1fr}}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Arduino Stok Takip Sistemi</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 240px;
+      height: 100vh;
+      background: #020617;
+      padding: 25px 18px;
+      border-right: 1px solid #1e293b;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #38bdf8;
+      margin-bottom: 35px;
+    }
+
+    .menu a {
+      display: block;
+      color: #94a3b8;
+      text-decoration: none;
+      padding: 13px 15px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      transition: 0.3s;
+    }
+
+    .menu a:hover,
+    .menu a.active {
+      background: #0ea5e9;
+      color: white;
+    }
+
+    .main {
+      margin-left: 240px;
+      padding: 25px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .topbar h1 {
+      font-size: 28px;
+    }
+
+    .search-box input {
+      background: #020617;
+      border: 1px solid #1e293b;
+      padding: 12px 18px;
+      border-radius: 12px;
+      color: white;
+      outline: none;
+      width: 260px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 0 20px rgba(14, 165, 233, 0.08);
+    }
+
+    .card span {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .card h2 {
+      margin-top: 12px;
+      font-size: 30px;
+      color: #38bdf8;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .panel {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 18px;
+      padding: 22px;
+    }
+
+    .panel h3 {
+      margin-bottom: 18px;
+      color: #f8fafc;
+    }
+
+    .bar {
+      margin-bottom: 16px;
+    }
+
+    .bar-title {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 7px;
+      color: #cbd5e1;
+    }
+
+    .bar-line {
+      height: 10px;
+      background: #1e293b;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0ea5e9, #22c55e);
+      border-radius: 20px;
+    }
+
+    .alert {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fecaca;
+      padding: 14px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+    }
+
+    .query-box {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .query-box input {
+      flex: 1;
+      background: #020617;
+      border: 1px solid #1e293b;
+      padding: 13px;
+      border-radius: 12px;
+      color: white;
+      outline: none;
+    }
+
+    .query-box button {
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      padding: 0 22px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #020617;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    th {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .product-img {
+      width: 55px;
+      height: 55px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: white;
+    }
+
+    .status {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .normal {
+      background: rgba(34, 197, 94, 0.15);
+      color: #86efac;
+    }
+
+    .low {
+      background: rgba(239, 68, 68, 0.15);
+      color: #fca5a5;
+    }
+
+    .medium {
+      background: rgba(234, 179, 8, 0.15);
+      color: #fde68a;
+    }
+
+    .action-btn {
+      background: #1e293b;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .cards,
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+
+      .search-box input {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div id="login" class="login">
-  <div class="hero">
-    <h1>Atölye<span>AI</span></h1>
-    <p>Stok, proje, sipariş ve atölye yönetim sistemi.</p>
-  </div>
-
-  <div class="login-card">
-    <h2>Hoş geldiniz 👋</h2>
-    <p>Kullanıcı adı ve kod ile giriş yap.</p>
-    <input id="uName" placeholder="Kullanıcı adı">
-    <input id="uCode" placeholder="Kod: ATLY-0001">
-    <input id="uPin" type="password" placeholder="PIN varsa yaz">
-    <label><input id="remember" type="checkbox"> Beni hatırla</label>
-    <button onclick="loginUser()">Giriş Yap</button>
-    <small>Admin kodu ekranda gösterilmez.</small>
-  </div>
-</div>
-
-<div id="app" class="app hidden">
   <aside class="sidebar">
-    <h2>◆ AtölyeAI</h2>
-    <button onclick="show('home')">🏠 Ana Sayfa</button>
-    <button onclick="show('stock')">📦 Stok</button>
-    <button onclick="show('search')">🔎 Stok Sorgula</button>
-    <button onclick="show('cats')">🏷️ Kategoriler</button>
-    <button onclick="show('projects')">🛠️ Projeler</button>
-    <button onclick="show('orders')">🛒 Siparişler</button>
-    <button onclick="show('messages')">💬 Mesajlar</button>
-    <button onclick="show('profile')">👤 Profil</button>
-    <button onclick="show('ai')">🤖 AI</button>
-    <button id="adminBtn" class="hidden" onclick="show('admin')">👑 Admin</button>
-    <button onclick="logout()">Çıkış</button>
+    <div class="logo">Arduino Stok</div>
+
+    <nav class="menu">
+      <a href="#" class="active">Dashboard</a>
+      <a href="#">Ürünler</a>
+      <a href="#">Kategoriler</a>
+      <a href="#">Sorgu Yap</a>
+      <a href="#">Stok Hareketleri</a>
+      <a href="#">Ayarlar</a>
+    </nav>
   </aside>
 
   <main class="main">
+
     <div class="topbar">
-      <input id="globalSearch" placeholder="Hızlı stok ara..." oninput="quickSearch()">
-      <button onclick="show('stock')">+ Malzeme Ekle</button>
-      <div class="profile"><img id="miniPhoto" class="avatar"><div><b id="topName"></b><br><small id="topRole"></small></div></div>
+      <h1>Arduino Proje Stok Takip</h1>
+
+      <div class="search-box">
+        <input type="text" placeholder="Hızlı arama yap...">
+      </div>
     </div>
 
-    <section id="home" class="page">
-      <div class="stats">
-        <div class="card"><small>Toplam Malzeme</small><b id="sTotal">0</b></div>
-        <div class="card"><small>Az Stok</small><b id="sLow">0</b></div>
-        <div class="card"><small>Kategori</small><b id="sCat">0</b></div>
-        <div class="card"><small>Toplam Değer</small><b id="sValue">0 TL</b></div>
+    <section class="cards">
+      <div class="card">
+        <span>Toplam Ürün</span>
+        <h2>24</h2>
       </div>
-      <div class="grid">
-        <div class="panel"><h2>Son Malzemeler</h2><div id="homeItems"></div></div>
-        <div class="panel"><h2>AI Asistan</h2><p id="aiText">Eksik stokları ve projeleri analiz eder.</p><button onclick="aiAnalyze()">Analiz Et</button></div>
+
+      <div class="card">
+        <span>Toplam Stok</span>
+        <h2>186</h2>
+      </div>
+
+      <div class="card">
+        <span>Düşük Stok</span>
+        <h2>5</h2>
+      </div>
+
+      <div class="card">
+        <span>Eksik Sipariş</span>
+        <h2>8</h2>
       </div>
     </section>
 
-    <section id="stock" class="page hidden">
-      <h1>Stok Yönetimi</h1>
-      <div class="panel form-grid">
-        <input id="iName" placeholder="Malzeme adı">
-        <input id="iCode" placeholder="Kod">
-        <select id="iCat"></select>
-        <input id="iLoc" placeholder="Reyon">
-        <input id="iCount" type="number" placeholder="Adet">
-        <input id="iMin" type="number" placeholder="Minimum">
-        <input id="iValue" type="number" placeholder="Birim değer">
-        <input id="iPhoto" placeholder="Foto link">
-        <input id="iNote" placeholder="Not">
-        <button onclick="saveItem()">Kaydet</button>
-        <button onclick="clearItem()">Temizle</button>
-      </div>
-      <div id="itemList" class="list"></div>
-    </section>
-
-    <section id="search" class="page hidden">
-      <h1>Stok Sorgula</h1>
-      <div class="panel form-grid">
-        <input id="qText" placeholder="Ad / kod / reyon">
-        <select id="qCat"></select>
-        <button onclick="searchStock()">Sorgula</button>
-      </div>
-      <div id="searchList" class="list"></div>
-    </section>
-
-    <section id="cats" class="page hidden">
-      <h1>Kategoriler</h1>
+    <section class="content-grid">
       <div class="panel">
-        <input id="catName" placeholder="Yeni kategori">
-        <button onclick="addCat()">Kategori Ekle</button>
-      </div>
-      <div id="catList" class="list"></div>
-    </section>
+        <h3>Stok Durumu</h3>
 
-    <section id="projects" class="page hidden">
-      <h1>Projeler</h1>
+        <div class="bar">
+          <div class="bar-title">
+            <span>Arduino Kartları</span>
+            <span>80%</span>
+          </div>
+          <div class="bar-line">
+            <div class="bar-fill" style="width:80%"></div>
+          </div>
+        </div>
+
+        <div class="bar">
+          <div class="bar-title">
+            <span>Sensörler</span>
+            <span>45%</span>
+          </div>
+          <div class="bar-line">
+            <div class="bar-fill" style="width:45%"></div>
+          </div>
+        </div>
+
+        <div class="bar">
+          <div class="bar-title">
+            <span>Motorlar</span>
+            <span>30%</span>
+          </div>
+          <div class="bar-line">
+            <div class="bar-fill" style="width:30%"></div>
+          </div>
+        </div>
+
+        <div class="bar">
+          <div class="bar-title">
+            <span>Kablolar & Modüller</span>
+            <span>65%</span>
+          </div>
+          <div class="bar-line">
+            <div class="bar-fill" style="width:65%"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="panel">
-        <input id="pName" placeholder="Proje adı">
-        <input id="pParts" placeholder="Gerekli parçalar: LCD, Arduino">
-        <button onclick="addProject()">Proje Ekle</button>
-      </div>
-      <div id="projectList" class="list"></div>
-    </section>
+        <h3>Uyarılar</h3>
 
-    <section id="orders" class="page hidden">
-      <h1>Siparişler</h1>
-      <div class="panel form-grid">
-        <input id="oName" placeholder="Ürün">
-        <input id="oCount" type="number" placeholder="Adet">
-        <input id="oPrice" type="number" placeholder="Birim fiyat">
-        <select id="oStatus"><option>Alınacak</option><option>Sipariş verildi</option><option>Kargoda</option><option>Teslim edildi</option></select>
-        <button onclick="addOrder()">Sipariş Ekle</button>
-      </div>
-      <div id="orderList" class="list"></div>
-    </section>
-
-    <section id="messages" class="page hidden">
-      <h1>Mesajlar</h1>
-      <div class="panel">
-        <input id="msgText" placeholder="Mesaj yaz">
-        <button onclick="sendMsg()">Gönder</button>
-      </div>
-      <div id="msgList" class="list"></div>
-    </section>
-
-    <section id="profile" class="page hidden">
-      <h1>Profil</h1>
-      <div class="panel">
-        <input id="prName" placeholder="Yeni isim">
-        <input id="prPin" type="password" placeholder="Yeni PIN">
-        <input id="prPhoto" placeholder="Profil foto linki">
-        <button onclick="saveProfile()">Kaydet</button>
+        <div class="alert">HC-SR04 sensör stoku çok az kaldı.</div>
+        <div class="alert">Servo motor sipariş edilmeli.</div>
+        <div class="alert">Breadboard stok seviyesi düşük.</div>
       </div>
     </section>
 
-    <section id="ai" class="page hidden">
-      <h1>AI Asistan</h1>
-      <div class="panel">
-        <div id="aiChat"></div>
-        <input id="aiInput" placeholder="Eksik stokları göster, proje öner...">
-        <button onclick="askAI()">Sor</button>
+    <section class="panel">
+      <h3>Sorgu Yap</h3>
+
+      <div class="query-box">
+        <input type="text" placeholder="Ürün adı, kategori veya stok durumu ara...">
+        <button>Ara</button>
       </div>
+
+      <h3>Ürün Listesi</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Resim</th>
+            <th>Ürün</th>
+            <th>Kategori</th>
+            <th>Stok</th>
+            <th>Durum</th>
+            <th>İşlem</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>
+              <img class="product-img" src="https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg">
+            </td>
+            <td>Arduino Uno R3</td>
+            <td>Kart</td>
+            <td>12</td>
+            <td><span class="status normal">Normal</span></td>
+            <td><button class="action-btn">Düzenle</button></td>
+          </tr>
+
+          <tr>
+            <td>
+              <img class="product-img" src="https://upload.wikimedia.org/wikipedia/commons/7/76/HC-SR04.jpg">
+            </td>
+            <td>HC-SR04 Mesafe Sensörü</td>
+            <td>Sensör</td>
+            <td>3</td>
+            <td><span class="status low">Düşük</span></td>
+            <td><button class="action-btn">Düzenle</button></td>
+          </tr>
+
+          <tr>
+            <td>
+              <img class="product-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Servo_Motor_SG90.jpg/320px-Servo_Motor_SG90.jpg">
+            </td>
+            <td>SG90 Servo Motor</td>
+            <td>Motor</td>
+            <td>5</td>
+            <td><span class="status medium">Orta</span></td>
+            <td><button class="action-btn">Düzenle</button></td>
+          </tr>
+
+          <tr>
+            <td>
+              <img class="product-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Breadboard.jpg/320px-Breadboard.jpg">
+            </td>
+            <td>Breadboard</td>
+            <td>Bağlantı</td>
+            <td>2</td>
+            <td><span class="status low">Düşük</span></td>
+            <td><button class="action-btn">Düzenle</button></td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
-    <section id="admin" class="page hidden">
-      <h1>Admin Paneli</h1>
-      <div class="panel"><input id="adminSearch" placeholder="Kullanıcı ara" oninput="renderAdmin()"></div>
-      <div class="grid">
-        <div class="panel"><h2>Kullanıcılar</h2><div id="adminUsers"></div></div>
-        <div class="panel"><h2>Seçili Envanter</h2><div id="adminInventory"></div></div>
-      </div>
-    </section>
   </main>
-</div>
 
-<script>
-let current=null, editId=null, adminView=null;
-const $=id=>document.getElementById(id);
-const avatar="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Crect width='80' height='80' rx='40' fill='%232563eb'/%3E%3Ctext x='40' y='50' font-size='34' text-anchor='middle' fill='white'%3EA%3C/text%3E%3C/svg%3E";
-let users=JSON.parse(localStorage.users||"[]");
-let items=JSON.parse(localStorage.items||"[]");
-let cats=JSON.parse(localStorage.cats||'["Elektronik","Mekanik","Kıyafet","Sensör","Kablo","Diğer"]');
-let orders=JSON.parse(localStorage.orders||"[]");
-let projects=JSON.parse(localStorage.projects||"[]");
-let msgs=JSON.parse(localStorage.msgs||"[]");
-
-if(!users.length){
-  users.push({name:"Admin",code:"ADMIN-0001",pin:"",role:"admin",photo:avatar,online:false,last:"-"});
-  for(let i=1;i<=9999;i++)users.push({name:"",code:"ATLY-"+String(i).padStart(4,"0"),pin:"",role:"user",photo:avatar,online:false,last:"-"});
-}
-function save(){localStorage.users=JSON.stringify(users);localStorage.items=JSON.stringify(items);localStorage.cats=JSON.stringify(cats);localStorage.orders=JSON.stringify(orders);localStorage.projects=JSON.stringify(projects);localStorage.msgs=JSON.stringify(msgs)}
-function loginUser(){let n=$("uName").value.trim(),c=$("uCode").value.trim().toUpperCase(),p=$("uPin").value;if(!n||!c)return alert("İsim ve kod yaz.");let u=users.find(x=>x.code===c);if(!u)return alert("Kod yok.");if(!u.name)u.name=n;if(u.name!==n)return alert("Kod başka kullanıcıya ait.");if(u.pin&&u.pin!==p)return alert("PIN yanlış.");if(!u.pin&&p)u.pin=p;current=u;u.online=true;u.last=new Date().toLocaleString("tr-TR");if($("remember").checked)localStorage.session=u.code;save();$("login").classList.add("hidden");$("app").classList.remove("hidden");$("adminBtn").classList.toggle("hidden",u.role!=="admin");renderAll();show("home")}
-function logout(){if(current){current.online=false;save()}localStorage.removeItem("session");location.reload()}
-function show(id){document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));$(id).classList.remove("hidden");renderAll()}
-function myItems(){return current.role==="admin"&&adminView?items.filter(x=>x.owner===adminView):items.filter(x=>x.owner===current.code)}
-function renderAll(){renderCats();renderHome();renderItems();renderOrders();renderProjects();renderMsgs();renderAdmin();$("topName").innerText=current.name;$("topRole").innerText=current.role;$("miniPhoto").src=current.photo}
-function renderCats(){$("iCat").innerHTML=cats.map(c=>`<option>${c}</option>`).join("");$("qCat").innerHTML='<option value="">Tüm Kategoriler</option>'+cats.map(c=>`<option>${c}</option>`).join("");$("catList").innerHTML=cats.map(c=>`<div class="item"><b>${c}</b><button class="small danger" onclick="delCat('${c}')">Sil</button></div>`).join("")}
-function addCat(){let c=$("catName").value.trim();if(!c)return;if(cats.includes(c))return alert("Var.");cats.push(c);$("catName").value="";save();renderAll()}
-function delCat(c){cats=cats.filter(x=>x!==c);items=items.map(i=>i.cat===c?{...i,cat:"Diğer"}:i);save();renderAll()}
-function saveItem(){let n=$("iName").value.trim();if(!n)return alert("Ad yaz.");let obj={id:editId||Date.now(),owner:current.role==="admin"&&adminView?adminView:current.code,name:n,code:$("iCode").value,cat:$("iCat").value,loc:$("iLoc").value,count:+$("iCount").value||0,min:+$("iMin").value||0,value:+$("iValue").value||0,photo:$("iPhoto").value,note:$("iNote").value};editId?items=items.map(i=>i.id===editId?obj:i):items.push(obj);editId=null;clearItem();save();renderAll()}
-function clearItem(){["iName","iCode","iLoc","iCount","iMin","iValue","iPhoto","iNote"].forEach(id=>$(id).value="")}
-function editItem(id){let i=items.find(x=>x.id===id);editId=id;$("iName").value=i.name;$("iCode").value=i.code;$("iCat").value=i.cat;$("iLoc").value=i.loc;$("iCount").value=i.count;$("iMin").value=i.min;$("iValue").value=i.value;$("iPhoto").value=i.photo;$("iNote").value=i.note;show("stock")}
-function delItem(id){items=items.filter(i=>i.id!==id);save();renderAll()}
-function status(i){return i.count<=0?["Eksik","bad"]:i.count<i.min?["Az","warn"]:["Yeterli","ok"]}
-function card(i){let s=status(i);return `<div class="item">${i.photo?`<img class="photo" src="${i.photo}">`:""}<div><b>${i.name}</b><br>${i.cat} | ${i.loc||"-"}<br>Adet: ${i.count} | Değer: ${i.count*i.value} TL<br><span class="badge ${s[1]}">${s[0]}</span></div><div><button class="small success" onclick="editItem(${i.id})">Düzenle</button><button class="small danger" onclick="delItem(${i.id})">Sil</button></div></div>`}
-function renderItems(){$("itemList").innerHTML=myItems().map(card).join("")||"<p>Malzeme yok.</p>"}
-function renderHome(){let arr=myItems(),low=arr.filter(i=>i.count<i.min),val=arr.reduce((s,i)=>s+i.count*i.value,0);$("sTotal").innerText=arr.length;$("sLow").innerText=low.length;$("sCat").innerText=cats.length;$("sValue").innerText=val+" TL";$("homeItems").innerHTML=arr.slice(-6).map(card).join("")||"<p>Malzeme yok.</p>";$("aiText").innerHTML=low.length?low.map(i=>`${i.name} az stokta.`).join("<br>"):"Stoklar iyi görünüyor."}
-function searchStock(){let q=$("qText").value.toLowerCase(),c=$("qCat").value;let r=myItems().filter(i=>(!q||i.name.toLowerCase().includes(q)||i.code.toLowerCase().includes(q)||i.loc.toLowerCase().includes(q))&&(!c||i.cat===c));$("searchList").innerHTML=r.map(card).join("")||"<p>Sonuç yok.</p>"}
-function quickSearch(){let q=$("globalSearch").value;if(!q)return;show("search");$("qText").value=q;searchStock()}
-function addOrder(){orders.push({id:Date.now(),owner:current.code,name:$("oName").value,count:+$("oCount").value||0,price:+$("oPrice").value||0,status:$("oStatus").value});save();renderAll()}
-function renderOrders(){$("orderList").innerHTML=orders.filter(o=>current.role==="admin"||o.owner===current.code).map(o=>`<div class="item"><b>${o.name}</b><span>${o.count} x ${o.price} TL</span><span>${o.status}</span></div>`).join("")||"<p>Sipariş yok.</p>"}
-function addProject(){projects.push({id:Date.now(),owner:current.code,name:$("pName").value,parts:$("pParts").value});save();renderAll()}
-function renderProjects(){$("projectList").innerHTML=projects.filter(p=>current.role==="admin"||p.owner===current.code).map(p=>`<div class="item"><b>${p.name}</b><span>${p.parts}</span></div>`).join("")||"<p>Proje yok.</p>"}
-function sendMsg(){msgs.push({user:current.name,text:$("msgText").value});$("msgText").value="";save();renderAll()}
-function renderMsgs(){$("msgList").innerHTML=msgs.map(m=>`<div class="item"><b>${m.user}</b><span>${m.text}</span></div>`).join("")||"<p>Mesaj yok.</p>"}
-function saveProfile(){if($("prName").value)current.name=$("prName").value;if($("prPin").value)current.pin=$("prPin").value;if($("prPhoto").value)current.photo=$("prPhoto").value;save();renderAll()}
-function askAI(){let q=$("aiInput").value.toLowerCase(),arr=myItems(),low=arr.filter(i=>i.count<i.min);let a="Stok, kategori, proje ve sipariş analizi yapabilirim.";if(q.includes("eksik")||q.includes("az"))a=low.length?low.map(i=>`${i.name}: ${i.count}/${i.min}`).join("<br>"):"Az stok yok.";if(q.includes("proje"))a=projects.filter(p=>p.owner===current.code).map(p=>p.name).join("<br>")||"Proje yok.";$("aiChat").innerHTML+=`<div class="ai-msg"><b>Sen:</b> ${$("aiInput").value}</div><div class="ai-msg"><b>AI:</b><br>${a}</div>`;$("aiInput").value=""}
-function aiAnalyze(){show("ai");$("aiInput").value="eksik stok";askAI()}
-function renderAdmin(){if(!current||current.role!=="admin"||!$("adminUsers"))return;let q=$("adminSearch").value.toLowerCase();$("adminUsers").innerHTML=users.filter(u=>u.code.toLowerCase().includes(q)||u.name.toLowerCase().includes(q)).slice(0,100).map(u=>`<div class="item"><div><b>${u.name||"Boşta"}</b><br>${u.code}<br>${u.online?"Aktif":"Pasif"} | ${u.role}</div><button class="small" onclick="viewUser('${u.code}')">Gör/Düzenle</button></div>`).join("");$("adminInventory").innerHTML=adminView?items.filter(i=>i.owner===adminView).map(card).join("")||"<p>Envanter boş.</p>":"<p>Kullanıcı seç.</p>"}
-function viewUser(code){adminView=code;show("stock")}
-window.onload=()=>{let s=localStorage.session;if(s){let u=users.find(x=>x.code===s);if(u){current=u;$("login").classList.add("hidden");$("app").classList.remove("hidden");$("adminBtn").classList.toggle("hidden",u.role!=="admin");renderAll();show("home")}}}
-save();
-</script>
 </body>
 </html>
