@@ -3,564 +3,227 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DepoPanel Demo</title>
+<title>Akıllı Depo Sistemi</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial,sans-serif}
-body{background:#070d18;color:#f4f7ff}
-.app{display:flex;min-height:100vh;background:radial-gradient(circle at 80% 0%,#111b32,#070d18 55%)}
-.sidebar{width:285px;height:100vh;position:fixed;left:0;top:0;background:#080f1d;border-right:1px solid #1b2b44;padding:24px 20px;overflow:auto}
-.logo{display:flex;align-items:center;gap:12px;font-size:25px;font-weight:800;margin-bottom:30px}
-.logo-icon{font-size:34px;color:#2f9dff}
-.menu-title{font-size:12px;color:#7f8da3;margin:21px 7px 10px}
-.menu button{width:100%;display:flex;align-items:center;gap:14px;color:#d8e3f2;background:transparent;border:0;text-align:left;padding:12px 14px;border-radius:10px;margin-bottom:6px;font-size:15px;cursor:pointer}
-.menu button.active{background:linear-gradient(90deg,#4b29b8,#1c2953);border:1px solid #6248e8;color:white}
-.menu button:hover{background:#111b2e}
-.dot{margin-left:auto;background:#ec3b66;color:white;border-radius:50%;padding:3px 8px;font-size:12px}
-.new{margin-left:auto;background:#7929e8;color:white;border-radius:999px;padding:4px 9px;font-size:12px}
-.guest{margin-top:35px;background:#0c1829;border:1px solid #1d324d;border-radius:12px;padding:22px;text-align:center}
-.guest h3{color:#38e48b;margin-bottom:8px}
-.guest p{color:#aab6c8;font-size:13px;margin-bottom:16px}
-.guest button{width:100%;padding:13px;border:0;border-radius:9px;background:#0b7543;color:white;font-weight:700}
-.main{margin-left:285px;width:calc(100% - 285px);padding:18px 24px}
-.topbar{height:56px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
-.search{width:455px;background:#0d1628;border:1px solid #1d2d47;border-radius:10px;color:#cbd5e1;padding:14px 18px;font-size:14px}
-.top-actions{display:flex;align-items:center;gap:16px}
-.add{background:linear-gradient(90deg,#4961ff,#7b2cff);border:0;color:white;border-radius:9px;padding:14px 24px;font-weight:700;font-size:15px;cursor:pointer}
-.icon{width:42px;height:42px;border-radius:10px;background:#0d1628;border:1px solid #1d2d47;display:flex;align-items:center;justify-content:center;position:relative}
-.notif{position:absolute;right:-6px;top:-7px;background:#ec3b66;color:white;font-size:12px;border-radius:50%;padding:3px 7px}
-.user{display:flex;align-items:center;gap:10px;color:#dce6f5}.user small{color:#a7b4c8}
-.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
-.card{background:#0d1628;border:1px solid #1d2d47;border-radius:12px;padding:24px 22px;display:flex;justify-content:space-between;align-items:center;min-height:128px}
-.card small{color:#a7b4c8}.card h2{font-size:30px;margin:10px 0 8px}.plus{color:#38e48b;font-size:13px}
-.card-icon{width:66px;height:66px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:33px}
-.purple{background:#241a5a;color:#8a65ff}.orange{background:#3c2815;color:#ffb443}.red{background:#3e1728;color:#ff5b73}.green{background:#123b2a;color:#47e682}
-.layout{display:grid;grid-template-columns:2fr .95fr;gap:14px}
-.panel{background:#0d1628;border:1px solid #1d2d47;border-radius:12px;padding:20px;margin-bottom:14px}
-.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-.panel h3{font-size:20px}.panel p{color:#a7b4c8;font-size:14px;margin-top:7px}
-.tool{background:#0b1322;border:1px solid #1d2d47;color:#dce7f5;border-radius:9px;padding:11px 16px;cursor:pointer}
-table{width:100%;border-collapse:collapse}
-th,td{padding:11px 10px;border-bottom:1px solid #1b2940;text-align:left;font-size:14px}
-th{color:#a7b4c8;font-weight:500;background:#0b1322}
-.photo{width:70px;height:48px;object-fit:cover;background:white;border-radius:7px}
-.tag,.status{padding:7px 10px;border-radius:7px;font-size:13px}
-.t-purple{background:#241a5a;color:#b09cff}.t-blue{background:#12325a;color:#65b8ff}.t-orange{background:#3c2815;color:#ffbf5f}.t-green{background:#113b2a;color:#55e68a}.t-cyan{background:#123b4b;color:#35d9ff}
-.az{background:#3b2815;color:#ffb443}.yeter{background:#123b2a;color:#55e68a}.eksik{background:#3e1728;color:#ff6d7e}
-.action{min-width:34px;height:34px;border-radius:8px;background:#172446;border:1px solid #25395f;color:#7da2ff;margin-right:6px;cursor:pointer}
-.more{text-align:center;color:#a7b4c8;margin-top:13px}
-.ai{background:linear-gradient(145deg,#11173a,#0d1628);border:1px solid #3a2867}
-.ai-title{color:#9d65ff;margin-bottom:18px}.chat-msg{background:#221c44;border-radius:12px;padding:15px;margin-bottom:14px;color:#eee7ff}
-.quick{display:block;width:max-content;margin:8px 0;padding:9px 12px;border-radius:8px;border:1px solid #6939c7;color:#9d84ff;background:transparent;cursor:pointer}
-.chat-input{display:flex;gap:8px;margin-top:18px}.chat-input input{flex:1;background:#151d32;border:1px solid #283751;color:white;border-radius:9px;padding:13px}.chat-input button{width:42px;border:0;border-radius:9px;background:#6d2bdc;color:white;cursor:pointer}
-.project-card{display:flex;gap:16px;margin-top:14px;background:#0b1322;border:1px solid #1d2d47;border-radius:10px;overflow:hidden}
-.project-card img{width:120px;object-fit:cover}.project-body{padding:15px}.tags{display:flex;gap:8px;flex-wrap:wrap;margin:13px 0}
-.tags span{background:#0f3944;color:#55eaff;padding:7px 10px;border-radius:7px;font-size:12px}.detail{width:100%;padding:13px;border:0;border-radius:8px;background:linear-gradient(90deg,#9a36e8,#5d23c8);color:white;font-weight:700;cursor:pointer}
-.ann{display:flex;align-items:center;gap:16px;padding:12px 5px;border-bottom:1px solid #1b2940}.ann-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:25px}.ann-text{flex:1}.ann small{color:#a7b4c8}.admin-note{text-align:right;color:#38e48b;font-size:13px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#f4f7fb;color:#111827}
+.app{display:flex;min-height:100vh}
+.sidebar{width:260px;background:#111827;color:white;padding:22px;position:fixed;height:100vh}
+.logo{font-size:24px;font-weight:bold;margin-bottom:30px;color:#60a5fa}
+.menu button{width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:14px;border-radius:12px;margin-bottom:8px;cursor:pointer;font-size:15px}
+.menu button.active,.menu button:hover{background:#2563eb;color:white}
+.main{margin-left:260px;width:calc(100% - 260px);padding:24px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
+.search{padding:13px 16px;border:1px solid #d1d5db;border-radius:12px;width:300px}
+.add{background:#2563eb;color:white;border:0;border-radius:12px;padding:13px 18px;font-weight:bold;cursor:pointer}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.card{background:white;border-radius:18px;padding:22px;box-shadow:0 8px 25px rgba(0,0,0,.06)}
+.card small{color:#6b7280}
+.card h2{font-size:30px;margin-top:10px}
+.panel{background:white;border-radius:18px;padding:22px;box-shadow:0 8px 25px rgba(0,0,0,.06);margin-bottom:18px}
 .page{display:none}
 .page.active{display:block}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;align-items:center;justify-content:center}
-.modal-box{width:520px;max-height:90vh;overflow:auto;background:#0d1628;border:1px solid #334a72;border-radius:14px;padding:22px}
-.modal-box h3{margin-bottom:15px}.modal-box input,.modal-box select,.modal-box textarea{width:100%;background:#08111f;border:1px solid #26384e;color:white;border-radius:9px;padding:12px;margin-bottom:10px}
-.modal-actions{display:flex;gap:10px;justify-content:flex-end}.cancel,.save{border:0;border-radius:9px;padding:12px 16px;color:white;cursor:pointer}.cancel{background:#334155}.save{background:#6d2bdc}
-.empty{text-align:center;color:#7f8da3;padding:35px}
-.admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.project-material{display:grid;grid-template-columns:1.5fr .7fr .7fr;gap:8px;margin-bottom:8px}
-.project-box{background:#0b1322;border:1px solid #1d2d47;border-radius:12px;padding:16px;margin-bottom:12px}
-.project-box h3{margin-bottom:8px}
-.project-box ul{margin-left:18px;color:#cbd5e1;font-size:14px}
-.code-pill{display:inline-block;background:#111b2e;border:1px solid #25395f;color:#8ab1ff;border-radius:8px;padding:6px 9px;font-size:12px}
-@media(max-width:1100px){.sidebar{position:relative;width:100%;height:auto}.main{margin-left:0;width:100%}.app{display:block}.cards,.layout,.admin-grid{grid-template-columns:1fr}.search{width:100%}.topbar{height:auto;gap:12px;flex-wrap:wrap}}
+.btn{background:#111827;color:white;border:0;border-radius:10px;padding:10px 14px;cursor:pointer;margin:4px}
+.btn.red{background:#dc2626}
+.btn.green{background:#16a34a}
+.empty{padding:35px;text-align:center;color:#6b7280;border:2px dashed #d1d5db;border-radius:16px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center}
+.modal-box{background:white;width:420px;border-radius:18px;padding:22px}
+.modal-box input,.modal-box textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px;margin-bottom:10px}
+@media(max-width:900px){
+.sidebar{position:relative;width:100%;height:auto}
+.main{margin-left:0;width:100%}
+.app{display:block}
+.cards{grid-template-columns:1fr}
+.topbar{flex-direction:column;align-items:flex-start;gap:12px}
+.search{width:100%}
+}
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
 <aside class="sidebar">
-  <div class="logo"><div class="logo-icon">❯❯</div><div>DepoPanel</div></div>
+  <div class="logo">⚡ Akıllı Depo</div>
 
-  <nav class="menu">
-    <button class="active" onclick="showPage('home',this)">⌂ Ana Sayfa</button>
-
-    <div class="menu-title">ENVANTER</div>
-    <button onclick="showPage('materials',this)">▦ Tüm Malzemeler</button>
-    <button onclick="showPage('categories',this)">▱ Kategoriler</button>
-    <button onclick="showPage('shelves',this)">▧ Reyonlar</button>
-    <button onclick="showPage('low',this)">ⓘ Az Kalanlar</button>
-    <button onclick="showPage('missing',this)">▣ Eksik Malzemeler</button>
-
-    <div class="menu-title">AKILLI SİSTEM</div>
-    <button onclick="showPage('ai',this)">✧ Yapay Zeka Asistanı <span class="new">Yeni</span></button>
-    <button onclick="showPage('projects',this)">✣ Projeler</button>
-    <button onclick="showPage('suggestions',this)">✦ Eksik Parça Önerileri</button>
-
-    <div class="menu-title">MESAJLAR</div>
-    <button onclick="showPage('messages',this)">✉ Mesajlar <span class="dot">2</span></button>
-    <button onclick="showPage('announcements',this)">☞ Duyurular</button>
-
-    <div class="menu-title">YÖNETİM</div>
-    <button onclick="showPage('admin',this)">♙ Admin Paneli</button>
-    <button onclick="showPage('invites',this)">⌘ Davet Kodları</button>
-    <button onclick="showPage('reports',this)">▥ Raporlar</button>
-    <button onclick="showPage('settings',this)">⚙ Ayarlar</button>
-  </nav>
-
-  <div class="guest">
-    <h3>Misafir Modu</h3>
-    <p>Sınırlı erişimdesiniz</p>
-    <button onclick="alert('Demo sistem: Admin olarak giriştesin.')">🔒 Üye Girişi Yap</button>
+  <div class="menu">
+    <button class="active" onclick="openPage('dashboard',this)">🏠 Ana Sayfa</button>
+    <button onclick="openPage('materials',this)">📦 Malzemeler</button>
+    <button onclick="openPage('projects',this)">🧠 Projeler</button>
+    <button onclick="openPage('chat',this)">💬 Sohbet</button>
+    <button onclick="openPage('admin',this)">⚙️ Admin Paneli</button>
+    <button onclick="openPage('settings',this)">🔧 Ayarlar</button>
   </div>
 </aside>
 
 <main class="main">
 
   <div class="topbar">
-    <input class="search" id="searchInput" placeholder="⌕  Malzeme ara...                                      Ctrl + K">
-    <div class="top-actions">
-      <button class="add" onclick="openModal()">＋ Malzeme Ekle</button>
-      <div class="icon">🔔<span class="notif" id="notifCount">0</span></div>
-      <div class="icon">👤</div>
-      <div class="user"><div><div>Hoş geldin, <b>Admin</b></div><small>Yönetici</small></div><span>⌄</span></div>
-    </div>
+    <input class="search" id="search" placeholder="Ara...">
+    <button class="add" onclick="openModal()">+ Yeni Kayıt</button>
   </div>
 
-  <section id="home" class="page active">
-    <section class="cards">
-      <div class="card"><div><small>Toplam Malzeme</small><h2 id="totalCount">0</h2><div class="plus" id="monthInfo">+0 bu ay</div></div><div class="card-icon purple">▱</div></div>
-      <div class="card"><div><small>Az Kalanlar</small><h2 id="lowCount">0</h2><small>Dikkat edilmesi gerek</small></div><div class="card-icon orange">⚠</div></div>
-      <div class="card"><div><small>Eksik Malzemeler</small><h2 id="missingCount">0</h2><small>Sipariş verilmeli</small></div><div class="card-icon red">▣</div></div>
-      <div class="card"><div><small>Toplam Değer</small><h2 id="totalValue">₺0</h2><small>Tahmini değer</small></div><div class="card-icon green">▣</div></div>
-    </section>
+  <section id="dashboard" class="page active">
+    <div class="cards">
+      <div class="card"><small>Toplam Malzeme</small><h2 id="countMaterials">0</h2></div>
+      <div class="card"><small>Toplam Proje</small><h2 id="countProjects">0</h2></div>
+      <div class="card"><small>Mesajlar</small><h2 id="countMessages">0</h2></div>
+      <div class="card"><small>Durum</small><h2>Aktif</h2></div>
+    </div>
 
-    <div class="layout">
-      <div>
-        <section class="panel">
-          <div class="panel-head">
-            <div><h3>Malzemeler</h3><p>Tüm malzemelerin listesi</p></div>
-            <div><button class="tool" onclick="showPageByName('low')">▽ Filtrele</button> <button class="tool" onclick="render()">☷</button></div>
-          </div>
-          <table>
-            <thead><tr><th>Fotoğraf</th><th>Kod</th><th>Malzeme Adı</th><th>Kategori</th><th>Reyon</th><th>Adet</th><th>Durum</th><th>İşlemler</th></tr></thead>
-            <tbody id="materialTable"></tbody>
-          </table>
-          <div class="more">Daha Fazla Göster⌄</div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head"><h3>Son Duyurular</h3><button class="tool" onclick="showPageByName('announcements')">Tümünü Gör</button></div>
-          <div id="annBox"></div>
-        </section>
-      </div>
-
-      <div>
-        <section class="panel ai">
-          <h3 class="ai-title">✦ Yapay Zeka Asistanı</h3>
-          <div class="chat-msg" id="aiAnswer">Merhaba! 👋<br>Ben senin yapay zeka asistanın.<br>Sana nasıl yardımcı olabilirim?</div>
-          <button class="quick" onclick="aiSuggest('projects')">Elimdeki malzemelerle ne yapabilirim?</button>
-          <button class="quick" onclick="aiSuggest('missing')">Eksik malzemeleri listele</button>
-          <button class="quick" onclick="aiSuggest('idea')">Bana proje fikri ver</button>
-          <button class="quick" onclick="showPageByName('projects')">Projelerimi aç</button>
-          <div class="chat-input"><input id="aiInput" placeholder="Sorunuzu yazın..."><button onclick="sendAI()">➤</button></div>
-        </section>
-
-        <section class="panel">
-          <div class="panel-head"><div><h3>🏅 Proje Fikri Önerisi</h3><p style="color:#38e48b">Yapay Zeka'dan</p></div><button class="tool" onclick="aiSuggest('idea')">↻</button></div>
-          <div class="project-card">
-            <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400">
-            <div class="project-body"><h3>Akıllı Hava Kalitesi Monitörü</h3><p>DHT11 sensörü ile sıcaklık ve nem ölçen, LCD ekranda gösteren akıllı sistem.</p><div class="tags"><span>Arduino</span><span>DHT11</span><span>LCD 16x2</span><span>Breadboard</span></div><button class="detail" onclick="showPageByName('projects')">Projeye Git</button></div>
-          </div>
-        </section>
-      </div>
+    <div class="panel">
+      <h2>Hoş geldin 👋</h2>
+      <p>Bu sistem boş başladı. Şimdi tek tek özellikleri ekleyeceğiz.</p>
     </div>
   </section>
 
   <section id="materials" class="page">
     <div class="panel">
-      <h3>Tüm Malzemeler</h3>
-      <p>Kayıtlı tüm malzemeler</p><br>
-      <table><thead><tr><th>Fotoğraf</th><th>Kod</th><th>Malzeme</th><th>Kategori</th><th>Reyon</th><th>Adet</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="allMaterials"></tbody></table>
-    </div>
-  </section>
-
-  <section id="categories" class="page"><div class="panel"><h3>Kategoriler</h3><div id="categoryList" class="admin-grid"></div></div></section>
-  <section id="shelves" class="page"><div class="panel"><h3>Reyonlar</h3><div id="shelfList" class="admin-grid"></div></div></section>
-  <section id="low" class="page"><div class="panel"><h3>Az Kalanlar</h3><table><tbody id="lowList"></tbody></table></div></section>
-  <section id="missing" class="page"><div class="panel"><h3>Eksik Malzemeler</h3><table><tbody id="missingList"></tbody></table></div></section>
-
-  <section id="ai" class="page">
-    <div class="panel ai">
-      <h3 class="ai-title">✦ Yapay Zeka Asistanı</h3>
-      <div class="chat-msg" id="aiPageAnswer">Sorunu yaz, demo cevap üreteyim.</div>
-      <div class="chat-input"><input id="aiPageInput" placeholder="Sorunuzu yazın..."><button onclick="aiPageSend()">➤</button></div>
+      <h2>Malzemeler</h2>
+      <div id="materialsList" class="empty">Henüz malzeme yok.</div>
     </div>
   </section>
 
   <section id="projects" class="page">
     <div class="panel">
-      <div class="panel-head">
-        <div>
-          <h3>Projeler</h3>
-          <p>Envanterdeki malzemeleri projelere bağla. Proje bittiğinde kullanılan malzemeler stoktan düşer.</p>
-        </div>
-        <button class="add" onclick="openProjectModal()">＋ Proje Yarat</button>
-      </div>
-      <div id="projectList"></div>
+      <h2>Projeler</h2>
+      <div id="projectsList" class="empty">Henüz proje yok.</div>
     </div>
   </section>
 
-  <section id="suggestions" class="page"><div class="panel"><h3>Eksik Parça Önerileri</h3><div id="suggestionList"></div></div></section>
-  <section id="messages" class="page"><div class="panel"><h3>Mesajlar</h3><textarea id="messageInput" placeholder="Mesaj yaz..."></textarea><button class="add" onclick="addMessage()">Mesaj Gönder</button><br><br><div id="messageList"></div></div></section>
-  <section id="announcements" class="page"><div class="panel"><h3>Duyurular</h3><textarea id="announcementInput" placeholder="Yeni duyuru yaz..."></textarea><button class="add" onclick="addAnnouncement()">Duyuru Ekle</button><br><br><div id="announcementList"></div></div></section>
+  <section id="chat" class="page">
+    <div class="panel">
+      <h2>Sohbet</h2>
+      <textarea id="messageInput" placeholder="Mesaj yaz..."></textarea>
+      <button class="btn green" onclick="sendMessage()">Gönder</button>
+      <br><br>
+      <div id="messagesList" class="empty">Henüz mesaj yok.</div>
+    </div>
+  </section>
 
   <section id="admin" class="page">
-    <section class="cards">
-      <div class="card"><div><small>Admin Malzeme Kontrolü</small><h2 id="adminMaterial">0</h2><small>Tüm kayıtlar</small></div><div class="card-icon purple">♙</div></div>
-      <div class="card"><div><small>Projeler</small><h2 id="adminProjects">0</h2><small>Aktif proje</small></div><div class="card-icon green">✣</div></div>
-      <div class="card"><div><small>Eksik Takip</small><h2 id="adminMissing">0</h2><small>Sipariş önerisi</small></div><div class="card-icon red">!</div></div>
-      <div class="card"><div><small>Duyuru</small><h2 id="adminAnn">0</h2><small>Yayınlanan</small></div><div class="card-icon orange">☞</div></div>
-    </section>
     <div class="panel">
-      <h3>Admin Yönetim Listesi</h3>
-      <p>Admin buradan malzemeleri, projeleri, duyuruları, mesajları ve stok durumunu takip eder.</p><br>
-      <table><thead><tr><th>Alan</th><th>Durum</th><th>İşlem</th></tr></thead>
-      <tbody>
-        <tr><td>Malzemeler</td><td id="adminMaterialsStatus">0 kayıt</td><td><button class="tool" onclick="showPageByName('materials')">Aç</button></td></tr>
-        <tr><td>Projeler</td><td id="adminProjectStatus">0 kayıt</td><td><button class="tool" onclick="showPageByName('projects')">Aç</button></td></tr>
-        <tr><td>Az Kalanlar</td><td id="adminLowStatus">0 kayıt</td><td><button class="tool" onclick="showPageByName('low')">Aç</button></td></tr>
-        <tr><td>Eksik Malzemeler</td><td id="adminMissingStatus">0 kayıt</td><td><button class="tool" onclick="showPageByName('missing')">Aç</button></td></tr>
-        <tr><td>Duyurular</td><td id="adminAnnStatus">0 kayıt</td><td><button class="tool" onclick="showPageByName('announcements')">Aç</button></td></tr>
-      </tbody></table>
+      <h2>Admin Paneli</h2>
+      <p>Admin buradan sistemi kontrol edecek.</p>
+      <br>
+      <button class="btn" onclick="alert('Kullanıcı yönetimi sonraki adımda eklenecek.')">Kullanıcıları Yönet</button>
+      <button class="btn" onclick="alert('Rapor sistemi sonraki adımda eklenecek.')">Raporları Aç</button>
+      <button class="btn red" onclick="resetSystem()">Sistemi Sıfırla</button>
     </div>
   </section>
 
-  <section id="invites" class="page"><div class="panel"><h3>Davet Kodları</h3><p>Demo davet kodu: <b>DEPO-2026</b></p></div></section>
-  <section id="reports" class="page"><div class="panel"><h3>Raporlar</h3><div id="reportBox"></div></div></section>
-  <section id="settings" class="page"><div class="panel"><h3>Ayarlar</h3><button class="add" onclick="resetSystem()">Tüm Verileri Sıfırla</button></div></section>
+  <section id="settings" class="page">
+    <div class="panel">
+      <h2>Ayarlar</h2>
+      <button class="btn" onclick="toggleTheme()">Tema Değiştir</button>
+    </div>
+  </section>
 
 </main>
 </div>
 
 <div class="modal" id="modal">
   <div class="modal-box">
-    <h3>Malzeme Ekle</h3>
-    <input id="mCode" placeholder="Otomatik kod oluşacak" readonly>
-    <input id="mName" placeholder="Malzeme adı">
-    <select id="mCategory">
-      <option>Elektronik</option><option>Ekranlar</option><option>Kablolar</option><option>Kartlar</option><option>Sensörler</option><option>Motorlar</option>
-    </select>
-    <input id="mShelf" placeholder="Reyon örn: A1 - 01">
-    <input id="mCount" type="number" placeholder="Adet">
-    <input id="mMin" type="number" placeholder="Az kaldı sınırı">
-    <input id="mPrice" type="number" placeholder="Birim fiyat">
-    <input id="mPhoto" placeholder="Fotoğraf linki">
-    <div class="modal-actions">
-      <button class="cancel" onclick="closeModal()">İptal</button>
-      <button class="save" onclick="addMaterial()">Kaydet</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal" id="projectModal">
-  <div class="modal-box">
-    <h3>Proje Yarat</h3>
-    <input id="projectName" placeholder="Proje adı">
-    <textarea id="projectDesc" placeholder="Proje açıklaması"></textarea>
-
-    <h3 style="font-size:16px;margin:15px 0 10px">Gerekli Malzemeler</h3>
-    <div id="projectMaterialInputs"></div>
-
-    <button class="tool" onclick="addProjectMaterialRow()">＋ Malzeme Satırı Ekle</button>
-
-    <div class="modal-actions" style="margin-top:15px">
-      <button class="cancel" onclick="closeProjectModal()">İptal</button>
-      <button class="save" onclick="createProject()">Projeyi Kaydet</button>
-    </div>
+    <h2>Yeni Kayıt</h2>
+    <input id="newName" placeholder="Kayıt adı">
+    <textarea id="newDesc" placeholder="Açıklama"></textarea>
+    <button class="btn green" onclick="addRecord()">Kaydet</button>
+    <button class="btn red" onclick="closeModal()">İptal</button>
   </div>
 </div>
 
 <script>
-let materials=JSON.parse(localStorage.getItem("depoMaterials"))||[];
-let announcements=JSON.parse(localStorage.getItem("depoAnnouncements"))||[];
-let messages=JSON.parse(localStorage.getItem("depoMessages"))||[];
-let projects=JSON.parse(localStorage.getItem("depoProjects"))||[];
+let materials = JSON.parse(localStorage.getItem("materials")) || [];
+let projects = JSON.parse(localStorage.getItem("projects")) || [];
+let messages = JSON.parse(localStorage.getItem("messages")) || [];
 
 function save(){
- localStorage.setItem("depoMaterials",JSON.stringify(materials));
- localStorage.setItem("depoAnnouncements",JSON.stringify(announcements));
- localStorage.setItem("depoMessages",JSON.stringify(messages));
- localStorage.setItem("depoProjects",JSON.stringify(projects));
+  localStorage.setItem("materials", JSON.stringify(materials));
+  localStorage.setItem("projects", JSON.stringify(projects));
+  localStorage.setItem("messages", JSON.stringify(messages));
 }
 
-function generateCode(){
- let len=Math.floor(Math.random()*3)+6;
- let chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
- let code="";
- for(let i=0;i<len;i++) code+=chars[Math.floor(Math.random()*chars.length)];
- if(materials.some(m=>m.code===code)) return generateCode();
- return code;
+function openPage(id,btn){
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
 }
 
 function openModal(){
- mCode.value=generateCode();
- modal.style.display="flex";
-}
-function closeModal(){modal.style.display="none"}
-
-function openProjectModal(){
- if(materials.length===0){alert("Önce envantere malzeme ekle.");return}
- projectName.value="";
- projectDesc.value="";
- projectMaterialInputs.innerHTML="";
- addProjectMaterialRow();
- projectModal.style.display="flex";
-}
-function closeProjectModal(){projectModal.style.display="none"}
-
-function addProjectMaterialRow(){
- let row=document.createElement("div");
- row.className="project-material";
- row.innerHTML=`
-  <select class="pm-select">
-    ${materials.map((m,i)=>`<option value="${i}">${m.name} — Stok: ${m.count}</option>`).join("")}
-  </select>
-  <input class="pm-count" type="number" placeholder="Adet" min="1" value="1">
-  <button class="tool" onclick="this.parentElement.remove()">Sil</button>
- `;
- projectMaterialInputs.appendChild(row);
+  modal.style.display="flex";
 }
 
-function createProject(){
- let name=projectName.value.trim();
- let desc=projectDesc.value.trim();
-
- if(!name){alert("Proje adı yaz.");return}
-
- let rows=[...document.querySelectorAll(".project-material")];
- let items=[];
-
- for(let r of rows){
-  let materialIndex=Number(r.querySelector(".pm-select").value);
-  let count=Number(r.querySelector(".pm-count").value);
-  if(count<=0){alert("Malzeme adedi 1 veya daha fazla olmalı.");return}
-  let m=materials[materialIndex];
-  items.push({
-    code:m.code,
-    name:m.name,
-    count:count
-  });
- }
-
- projects.push({
-  id:Date.now(),
-  name,
-  desc,
-  items,
-  status:"Devam Ediyor",
-  created:new Date().toLocaleString("tr-TR")
- });
-
- save();
- render();
- closeProjectModal();
+function closeModal(){
+  modal.style.display="none";
 }
 
-function finishProject(id){
- let project=projects.find(p=>p.id===id);
- if(!project)return;
+function addRecord(){
+  let name = newName.value.trim();
+  let desc = newDesc.value.trim();
 
- for(let item of project.items){
-  let m=materials.find(x=>x.code===item.code);
-  if(!m){alert(item.name+" artık envanterde yok.");return}
-  if(Number(m.count)<Number(item.count)){
-    alert(item.name+" stoğu yetersiz. Gerekli: "+item.count+" / Mevcut: "+m.count);
+  if(!name){
+    alert("Kayıt adı yaz.");
     return;
   }
- }
 
- if(!confirm("Proje bitti olarak işaretlensin mi? Kullanılan malzemeler stoktan düşecek."))return;
-
- for(let item of project.items){
-  let m=materials.find(x=>x.code===item.code);
-  m.count=Number(m.count)-Number(item.count);
- }
-
- project.status="Bitti";
- project.finished=new Date().toLocaleString("tr-TR");
-
- save();
- render();
-}
-
-function deleteProject(id){
- if(confirm("Proje silinsin mi?")){
-  projects=projects.filter(p=>p.id!==id);
+  materials.push({name,desc,date:new Date().toLocaleString("tr-TR")});
+  newName.value="";
+  newDesc.value="";
+  closeModal();
   save();
   render();
- }
 }
 
-function showPage(id,btn){
- document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
- document.getElementById(id).classList.add("active");
- document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
- btn.classList.add("active");
- render();
-}
-function showPageByName(id){
- document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
- document.getElementById(id).classList.add("active");
- render();
-}
+function sendMessage(){
+  let text = messageInput.value.trim();
+  if(!text)return;
 
-function categoryClass(c){
- if(c==="Ekranlar")return"t-blue";
- if(c==="Kablolar")return"t-orange";
- if(c==="Kartlar")return"t-green";
- if(c==="Sensörler")return"t-cyan";
- return"t-purple";
+  messages.push({text,date:new Date().toLocaleTimeString("tr-TR")});
+  messageInput.value="";
+  save();
+  render();
 }
-function getStatus(m){
- if(Number(m.count)<=0)return["Eksik","eksik"];
- if(Number(m.count)<=Number(m.min))return["Az Kaldı","az"];
- return["Yeterli","yeter"];
-}
-function money(n){return"₺"+Number(n).toLocaleString("tr-TR")}
-
-function addMaterial(){
- if(!mName.value||!mShelf.value){alert("Malzeme adı ve reyon yaz.");return}
- materials.push({
-  code:mCode.value||generateCode(),
-  name:mName.value,
-  category:mCategory.value,
-  shelf:mShelf.value,
-  count:Number(mCount.value||0),
-  min:Number(mMin.value||1),
-  price:Number(mPrice.value||0),
-  photo:mPhoto.value||"https://via.placeholder.com/100",
-  created:new Date().toLocaleDateString("tr-TR")
- });
- mCode.value=mName.value=mShelf.value=mCount.value=mMin.value=mPrice.value=mPhoto.value="";
- save();render();closeModal();
-}
-
-function deleteMaterial(i){if(confirm("Malzeme silinsin mi?")){materials.splice(i,1);save();render()}}
-function plus(i){materials[i].count++;save();render()}
-function minus(i){if(materials[i].count>0)materials[i].count--;save();render()}
-
-function row(m,i){
- let s=getStatus(m);
- return `<tr>
- <td><img class="photo" src="${m.photo}" onerror="this.src='https://via.placeholder.com/100'"></td>
- <td><span class="code-pill">${m.code||"KOD-YOK"}</span></td>
- <td>${m.name}</td>
- <td><span class="tag ${categoryClass(m.category)}">${m.category}</span></td>
- <td>${m.shelf}</td>
- <td>${m.count} adet</td>
- <td><span class="status ${s[1]}">${s[0]}</span></td>
- <td><button class="action" onclick="plus(${i})">＋</button><button class="action" onclick="minus(${i})">－</button><button class="action" onclick="deleteMaterial(${i})">✕</button></td>
- </tr>`;
-}
-
-function addAnnouncement(){
- if(!announcementInput.value.trim())return;
- announcements.unshift({text:announcementInput.value,time:new Date().toLocaleString("tr-TR")});
- announcementInput.value="";
- save();render();
-}
-function addMessage(){
- if(!messageInput.value.trim())return;
- messages.unshift({text:messageInput.value,time:new Date().toLocaleString("tr-TR"),from:"Admin"});
- messageInput.value="";
- save();render();
-}
-
-function aiSuggest(type){
- if(type==="missing"){
-   let miss=materials.filter(m=>m.count<=0);
-   aiAnswer.innerHTML=miss.length?`Eksik malzemeler:<br>${miss.map(m=>"• "+m.name).join("<br>")}`:"Eksik malzeme yok.";
- }
- if(type==="projects") aiAnswer.innerHTML="Projeler sayfasından yeni proje yaratabilir, envanterden malzeme seçebilir ve proje bitince stokları otomatik düşürebilirsin.";
- if(type==="idea") aiAnswer.innerHTML="Proje fikri: LCD ekranlı sıcaklık-nem takip paneli. DHT11, Arduino, LCD ve jumper kablolar kullanılır.";
-}
-function sendAI(){aiAnswer.innerHTML=aiInput.value?`Demo cevap: "${aiInput.value}" sorusuna göre malzemelerini kontrol edip öneri hazırlayabilirim.`:"Bir soru yaz."}
-function aiPageSend(){aiPageAnswer.innerHTML=aiPageInput.value?`Demo cevap: ${aiPageInput.value}`:"Soru yazmalısın."}
 
 function resetSystem(){
- if(confirm("Tüm demo verileri sıfırlansın mı?")){
-  materials=[];announcements=[];messages=[];projects=[];save();render();
- }
+  if(confirm("Her şey sıfırlansın mı?")){
+    materials=[];
+    projects=[];
+    messages=[];
+    save();
+    render();
+  }
 }
 
-function renderProjects(){
- if(projects.length===0){
-  projectList.innerHTML=`<div class="empty">Henüz proje yok. “Proje Yarat” butonuyla oluştur.</div>`;
-  return;
- }
-
- projectList.innerHTML=projects.map(p=>`
-  <div class="project-box">
-    <div class="panel-head">
-      <div>
-        <h3>${p.name}</h3>
-        <p>${p.desc||"Açıklama yok."}</p>
-        <p><span class="status ${p.status==="Bitti"?"yeter":"az"}">${p.status}</span> <small>${p.created}</small></p>
-      </div>
-      <div>
-        ${p.status!=="Bitti"?`<button class="add" onclick="finishProject(${p.id})">Proje Bitti</button>`:""}
-        <button class="tool" onclick="deleteProject(${p.id})">Sil</button>
-      </div>
-    </div>
-    <b>Gerekli Malzemeler:</b>
-    <ul>
-      ${p.items.map(i=>`<li>${i.name} — ${i.count} adet</li>`).join("")}
-    </ul>
-  </div>
- `).join("");
+function toggleTheme(){
+  document.body.style.background =
+    document.body.style.background === "rgb(17, 24, 39)" ? "#f4f7fb" : "#111827";
 }
 
 function render(){
- let q=(searchInput.value||"").toLowerCase();
- let list=materials.filter(m=>(m.name||"").toLowerCase().includes(q)||(m.category||"").toLowerCase().includes(q)||(m.shelf||"").toLowerCase().includes(q)||(m.code||"").toLowerCase().includes(q));
- let low=materials.filter(m=>m.count>0&&m.count<=m.min);
- let missing=materials.filter(m=>m.count<=0);
- let total=materials.reduce((a,b)=>a+(b.count*b.price),0);
+  countMaterials.innerText = materials.length;
+  countProjects.innerText = projects.length;
+  countMessages.innerText = messages.length;
 
- materialTable.innerHTML=list.length?list.map(row).join(""):`<tr><td colspan="8" class="empty">Henüz malzeme eklenmedi.</td></tr>`;
- allMaterials.innerHTML=materials.length?materials.map(row).join(""):`<tr><td colspan="8" class="empty">Henüz malzeme yok.</td></tr>`;
- lowList.innerHTML=low.length?low.map((m)=>row(m,materials.indexOf(m))).join(""):`<tr><td class="empty">Az kalan malzeme yok.</td></tr>`;
- missingList.innerHTML=missing.length?missing.map((m)=>row(m,materials.indexOf(m))).join(""):`<tr><td class="empty">Eksik malzeme yok.</td></tr>`;
+  materialsList.innerHTML = materials.length
+    ? materials.map((m,i)=>`
+      <div class="panel">
+        <b>${m.name}</b><br>
+        <small>${m.desc || "Açıklama yok."}</small><br><br>
+        <button class="btn red" onclick="materials.splice(${i},1);save();render()">Sil</button>
+      </div>
+    `).join("")
+    : "Henüz malzeme yok.";
 
- totalCount.innerText=materials.length;
- lowCount.innerText=low.length;
- missingCount.innerText=missing.length;
- totalValue.innerText=money(total);
- notifCount.innerText=low.length+missing.length;
-
- categoryList.innerHTML=[...new Set(materials.map(m=>m.category))].map(c=>`<div class="card"><div><small>Kategori</small><h2>${c}</h2><small>${materials.filter(m=>m.category===c).length} malzeme</small></div></div>`).join("")||"<p>Kategori yok.</p>";
- shelfList.innerHTML=[...new Set(materials.map(m=>m.shelf))].map(c=>`<div class="card"><div><small>Reyon</small><h2>${c}</h2><small>${materials.filter(m=>m.shelf===c).length} malzeme</small></div></div>`).join("")||"<p>Reyon yok.</p>";
-
- annBox.innerHTML=announcements.length?announcements.slice(0,2).map(a=>`<div class="ann"><div class="ann-icon purple">🔊</div><div class="ann-text"><b>Duyuru</b><br><small>${a.text}</small></div><div class="admin-note">Admin<br><small>${a.time}</small></div></div>`).join(""):`<div class="ann"><div class="ann-icon green">🔊</div><div class="ann-text"><b>Sistem Hazır</b><br><small>Malzemeleri admin panelinden ekleyebilirsiniz.</small></div><div class="admin-note">Admin<br><small>Şimdi</small></div></div>`;
- announcementList.innerHTML=announcements.length?announcements.map(a=>`<div class="ann"><div class="ann-icon purple">🔊</div><div class="ann-text">${a.text}<br><small>${a.time}</small></div></div>`).join(""):"<p>Duyuru yok.</p>";
- messageList.innerHTML=messages.length?messages.map(m=>`<div class="ann"><div class="ann-icon green">✉</div><div class="ann-text"><b>${m.from}</b><br><small>${m.text}</small><br><small>${m.time}</small></div></div>`).join(""):"<p>Mesaj yok.</p>";
-
- suggestionList.innerHTML=missing.length?missing.map(m=>`<div class="ann"><div class="ann-icon red">!</div><div class="ann-text"><b>${m.name}</b><br><small>Bu malzeme eksik. Sipariş listesine eklenmeli.</small></div></div>`).join(""):"<p>Eksik parça önerisi yok.</p>";
-
- adminMaterial.innerText=materials.length;
- adminProjects.innerText=projects.length;
- adminMissing.innerText=missing.length;
- adminAnn.innerText=announcements.length;
- adminMaterialsStatus.innerText=materials.length+" kayıt";
- adminProjectStatus.innerText=projects.length+" kayıt";
- adminLowStatus.innerText=low.length+" kayıt";
- adminMissingStatus.innerText=missing.length+" kayıt";
- adminAnnStatus.innerText=announcements.length+" kayıt";
-
- reportBox.innerHTML=`<p>Toplam malzeme: <b>${materials.length}</b></p><p>Toplam proje: <b>${projects.length}</b></p><p>Az kalan: <b>${low.length}</b></p><p>Eksik: <b>${missing.length}</b></p><p>Toplam değer: <b>${money(total)}</b></p>`;
-
- renderProjects();
+  messagesList.innerHTML = messages.length
+    ? messages.map(m=>`<div class="panel">${m.text}<br><small>${m.date}</small></div>`).join("")
+    : "Henüz mesaj yok.";
 }
-searchInput.addEventListener("input",render);
+
 render();
 </script>
 
