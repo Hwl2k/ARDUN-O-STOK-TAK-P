@@ -8,7 +8,12 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:#f4f7fb;color:#111827}
-.app{display:flex;min-height:100vh}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#111827,#2563eb)}
+.login-box{width:390px;background:white;border-radius:22px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.login-box h1{margin-bottom:8px}.login-box p{color:#6b7280;margin-bottom:18px}
+.login-box input{width:100%;padding:13px;border:1px solid #d1d5db;border-radius:12px;margin-bottom:10px}
+.row{display:flex;gap:10px}
+.app{display:none;min-height:100vh}
 .sidebar{width:260px;background:#111827;color:white;padding:22px;position:fixed;height:100vh}
 .logo{font-size:24px;font-weight:bold;margin-bottom:30px;color:#60a5fa}
 .menu button{width:100%;border:0;background:transparent;color:#cbd5e1;text-align:left;padding:14px;border-radius:12px;margin-bottom:8px;cursor:pointer;font-size:15px}
@@ -16,35 +21,42 @@ body{background:#f4f7fb;color:#111827}
 .main{margin-left:260px;width:calc(100% - 260px);padding:24px}
 .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
 .search{padding:13px 16px;border:1px solid #d1d5db;border-radius:12px;width:300px}
-.add{background:#2563eb;color:white;border:0;border-radius:12px;padding:13px 18px;font-weight:bold;cursor:pointer}
+.add,.btn{background:#2563eb;color:white;border:0;border-radius:12px;padding:13px 18px;font-weight:bold;cursor:pointer}
+.btn.red{background:#dc2626}.btn.green{background:#16a34a}.btn.dark{background:#111827}
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
 .card{background:white;border-radius:18px;padding:22px;box-shadow:0 8px 25px rgba(0,0,0,.06)}
-.card small{color:#6b7280}
-.card h2{font-size:30px;margin-top:10px}
+.card small{color:#6b7280}.card h2{font-size:30px;margin-top:10px}
 .panel{background:white;border-radius:18px;padding:22px;box-shadow:0 8px 25px rgba(0,0,0,.06);margin-bottom:18px}
-.page{display:none}
-.page.active{display:block}
-.btn{background:#111827;color:white;border:0;border-radius:10px;padding:10px 14px;cursor:pointer;margin:4px}
-.btn.red{background:#dc2626}
-.btn.green{background:#16a34a}
+.page{display:none}.page.active{display:block}
 .empty{padding:35px;text-align:center;color:#6b7280;border:2px dashed #d1d5db;border-radius:16px}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center}
 .modal-box{background:white;width:420px;border-radius:18px;padding:22px}
 .modal-box input,.modal-box textarea{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:10px;margin-bottom:10px}
-@media(max-width:900px){
-.sidebar{position:relative;width:100%;height:auto}
-.main{margin-left:0;width:100%}
-.app{display:block}
-.cards{grid-template-columns:1fr}
-.topbar{flex-direction:column;align-items:flex-start;gap:12px}
-.search{width:100%}
-}
+.hidden{display:none!important}
+@media(max-width:900px){.sidebar{position:relative;width:100%;height:auto}.main{margin-left:0;width:100%}.app{display:block}.cards{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start;gap:12px}.search{width:100%}}
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="login" id="loginPage">
+  <div class="login-box">
+    <h1>⚡ Akıllı Depo</h1>
+    <p>Admin / üye giriş sistemi</p>
+
+    <input id="username" placeholder="Kullanıcı adı">
+    <input id="password" type="password" placeholder="Şifre">
+
+    <div class="row">
+      <button class="btn green" onclick="login()">Giriş Yap</button>
+      <button class="btn dark" onclick="register()">Üye Ol</button>
+    </div>
+
+    <p style="font-size:13px;margin-top:15px">Admin: <b>admin</b> / Şifre: <b>1234</b></p>
+  </div>
+</div>
+
+<div class="app" id="app">
 
 <aside class="sidebar">
   <div class="logo">⚡ Akıllı Depo</div>
@@ -54,8 +66,9 @@ body{background:#f4f7fb;color:#111827}
     <button onclick="openPage('materials',this)">📦 Malzemeler</button>
     <button onclick="openPage('projects',this)">🧠 Projeler</button>
     <button onclick="openPage('chat',this)">💬 Sohbet</button>
-    <button onclick="openPage('admin',this)">⚙️ Admin Paneli</button>
+    <button id="adminBtn" onclick="openPage('admin',this)">⚙️ Admin Paneli</button>
     <button onclick="openPage('settings',this)">🔧 Ayarlar</button>
+    <button onclick="logout()">🚪 Çıkış</button>
   </div>
 </aside>
 
@@ -63,7 +76,10 @@ body{background:#f4f7fb;color:#111827}
 
   <div class="topbar">
     <input class="search" id="search" placeholder="Ara...">
-    <button class="add" onclick="openModal()">+ Yeni Kayıt</button>
+    <div>
+      <span id="userInfo"></span>
+      <button id="newBtn" class="add" onclick="openModal()">+ Yeni Kayıt</button>
+    </div>
   </div>
 
   <section id="dashboard" class="page active">
@@ -71,12 +87,12 @@ body{background:#f4f7fb;color:#111827}
       <div class="card"><small>Toplam Malzeme</small><h2 id="countMaterials">0</h2></div>
       <div class="card"><small>Toplam Proje</small><h2 id="countProjects">0</h2></div>
       <div class="card"><small>Mesajlar</small><h2 id="countMessages">0</h2></div>
-      <div class="card"><small>Durum</small><h2>Aktif</h2></div>
+      <div class="card"><small>Rol</small><h2 id="roleText">-</h2></div>
     </div>
 
     <div class="panel">
       <h2>Hoş geldin 👋</h2>
-      <p>Bu sistem boş başladı. Şimdi tek tek özellikleri ekleyeceğiz.</p>
+      <p>Admin her şeyi yönetir. Üyeler sistemi görüntüler ve sohbet edebilir.</p>
     </div>
   </section>
 
@@ -107,11 +123,15 @@ body{background:#f4f7fb;color:#111827}
   <section id="admin" class="page">
     <div class="panel">
       <h2>Admin Paneli</h2>
-      <p>Admin buradan sistemi kontrol edecek.</p>
+      <p>Sadece admin görebilir.</p>
       <br>
-      <button class="btn" onclick="alert('Kullanıcı yönetimi sonraki adımda eklenecek.')">Kullanıcıları Yönet</button>
-      <button class="btn" onclick="alert('Rapor sistemi sonraki adımda eklenecek.')">Raporları Aç</button>
+      <button class="btn" onclick="openModal()">Malzeme Ekle</button>
       <button class="btn red" onclick="resetSystem()">Sistemi Sıfırla</button>
+    </div>
+
+    <div class="panel">
+      <h2>Kullanıcılar</h2>
+      <div id="usersList"></div>
     </div>
   </section>
 
@@ -127,8 +147,8 @@ body{background:#f4f7fb;color:#111827}
 
 <div class="modal" id="modal">
   <div class="modal-box">
-    <h2>Yeni Kayıt</h2>
-    <input id="newName" placeholder="Kayıt adı">
+    <h2>Yeni Malzeme</h2>
+    <input id="newName" placeholder="Malzeme adı">
     <textarea id="newDesc" placeholder="Açıklama"></textarea>
     <button class="btn green" onclick="addRecord()">Kaydet</button>
     <button class="btn red" onclick="closeModal()">İptal</button>
@@ -136,17 +156,74 @@ body{background:#f4f7fb;color:#111827}
 </div>
 
 <script>
+let users = JSON.parse(localStorage.getItem("users")) || [
+  {name:"admin", pass:"1234", role:"admin"}
+];
+
 let materials = JSON.parse(localStorage.getItem("materials")) || [];
 let projects = JSON.parse(localStorage.getItem("projects")) || [];
 let messages = JSON.parse(localStorage.getItem("messages")) || [];
+let currentUser = null;
 
 function save(){
+  localStorage.setItem("users", JSON.stringify(users));
   localStorage.setItem("materials", JSON.stringify(materials));
   localStorage.setItem("projects", JSON.stringify(projects));
   localStorage.setItem("messages", JSON.stringify(messages));
 }
 
+function login(){
+  let u=username.value.trim();
+  let p=password.value.trim();
+  let found=users.find(x=>x.name===u && x.pass===p);
+
+  if(!found){alert("Kullanıcı adı veya şifre yanlış.");return}
+
+  currentUser=found;
+  loginPage.style.display="none";
+  app.style.display="flex";
+
+  setupRole();
+  render();
+}
+
+function register(){
+  let u=username.value.trim();
+  let p=password.value.trim();
+
+  if(!u || !p){alert("Kullanıcı adı ve şifre yaz.");return}
+  if(users.some(x=>x.name===u)){alert("Bu kullanıcı zaten var.");return}
+
+  users.push({name:u,pass:p,role:"user"});
+  save();
+  alert("Üyelik oluşturuldu. Şimdi giriş yapabilirsin.");
+}
+
+function logout(){
+  currentUser=null;
+  app.style.display="none";
+  loginPage.style.display="flex";
+}
+
+function setupRole(){
+  userInfo.innerHTML = `<b>${currentUser.name}</b> / ${currentUser.role}`;
+  roleText.innerText = currentUser.role;
+
+  if(currentUser.role==="admin"){
+    adminBtn.classList.remove("hidden");
+    newBtn.classList.remove("hidden");
+  }else{
+    adminBtn.classList.add("hidden");
+    newBtn.classList.add("hidden");
+  }
+}
+
 function openPage(id,btn){
+  if(id==="admin" && currentUser.role!=="admin"){
+    alert("Admin paneline sadece admin girebilir.");
+    return;
+  }
+
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 
@@ -155,23 +232,27 @@ function openPage(id,btn){
 }
 
 function openModal(){
+  if(currentUser.role!=="admin"){
+    alert("Sadece admin malzeme ekleyebilir.");
+    return;
+  }
   modal.style.display="flex";
 }
 
-function closeModal(){
-  modal.style.display="none";
-}
+function closeModal(){modal.style.display="none"}
 
 function addRecord(){
-  let name = newName.value.trim();
-  let desc = newDesc.value.trim();
+  let name=newName.value.trim();
+  let desc=newDesc.value.trim();
 
-  if(!name){
-    alert("Kayıt adı yaz.");
-    return;
-  }
+  if(!name){alert("Malzeme adı yaz.");return}
 
-  materials.push({name,desc,date:new Date().toLocaleString("tr-TR")});
+  materials.push({
+    name,
+    desc,
+    date:new Date().toLocaleString("tr-TR")
+  });
+
   newName.value="";
   newDesc.value="";
   closeModal();
@@ -180,11 +261,30 @@ function addRecord(){
 }
 
 function sendMessage(){
-  let text = messageInput.value.trim();
+  let text=messageInput.value.trim();
   if(!text)return;
 
-  messages.push({text,date:new Date().toLocaleTimeString("tr-TR")});
+  messages.push({
+    from:currentUser.name,
+    text,
+    date:new Date().toLocaleTimeString("tr-TR")
+  });
+
   messageInput.value="";
+  save();
+  render();
+}
+
+function deleteMaterial(i){
+  if(currentUser.role!=="admin"){alert("Sadece admin silebilir.");return}
+  materials.splice(i,1);
+  save();
+  render();
+}
+
+function deleteUser(i){
+  if(users[i].name==="admin"){alert("Ana admin silinemez.");return}
+  users.splice(i,1);
   save();
   render();
 }
@@ -205,26 +305,37 @@ function toggleTheme(){
 }
 
 function render(){
-  countMaterials.innerText = materials.length;
-  countProjects.innerText = projects.length;
-  countMessages.innerText = messages.length;
+  countMaterials.innerText=materials.length;
+  countProjects.innerText=projects.length;
+  countMessages.innerText=messages.length;
 
-  materialsList.innerHTML = materials.length
+  materialsList.innerHTML=materials.length
     ? materials.map((m,i)=>`
       <div class="panel">
         <b>${m.name}</b><br>
-        <small>${m.desc || "Açıklama yok."}</small><br><br>
-        <button class="btn red" onclick="materials.splice(${i},1);save();render()">Sil</button>
+        <small>${m.desc || "Açıklama yok."}</small><br>
+        <small>${m.date}</small><br><br>
+        ${currentUser?.role==="admin" ? `<button class="btn red" onclick="deleteMaterial(${i})">Sil</button>` : ""}
       </div>
     `).join("")
     : "Henüz malzeme yok.";
 
-  messagesList.innerHTML = messages.length
-    ? messages.map(m=>`<div class="panel">${m.text}<br><small>${m.date}</small></div>`).join("")
+  messagesList.innerHTML=messages.length
+    ? messages.map(m=>`
+      <div class="panel">
+        <b>${m.from}</b>: ${m.text}<br>
+        <small>${m.date}</small>
+      </div>
+    `).join("")
     : "Henüz mesaj yok.";
-}
 
-render();
+  usersList.innerHTML=users.map((u,i)=>`
+    <div class="panel">
+      <b>${u.name}</b> / ${u.role}
+      ${u.name!=="admin" ? `<button class="btn red" onclick="deleteUser(${i})">Sil</button>` : ""}
+    </div>
+  `).join("");
+}
 </script>
 
 </body>
