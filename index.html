@@ -60,11 +60,16 @@ th{color:#a7b4c8;font-weight:500;background:#0b1322}
 .page{display:none}
 .page.active{display:block}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:50;align-items:center;justify-content:center}
-.modal-box{width:480px;background:#0d1628;border:1px solid #334a72;border-radius:14px;padding:22px}
+.modal-box{width:520px;max-height:90vh;overflow:auto;background:#0d1628;border:1px solid #334a72;border-radius:14px;padding:22px}
 .modal-box h3{margin-bottom:15px}.modal-box input,.modal-box select,.modal-box textarea{width:100%;background:#08111f;border:1px solid #26384e;color:white;border-radius:9px;padding:12px;margin-bottom:10px}
 .modal-actions{display:flex;gap:10px;justify-content:flex-end}.cancel,.save{border:0;border-radius:9px;padding:12px 16px;color:white;cursor:pointer}.cancel{background:#334155}.save{background:#6d2bdc}
 .empty{text-align:center;color:#7f8da3;padding:35px}
 .admin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.project-material{display:grid;grid-template-columns:1.5fr .7fr .7fr;gap:8px;margin-bottom:8px}
+.project-box{background:#0b1322;border:1px solid #1d2d47;border-radius:12px;padding:16px;margin-bottom:12px}
+.project-box h3{margin-bottom:8px}
+.project-box ul{margin-left:18px;color:#cbd5e1;font-size:14px}
+.code-pill{display:inline-block;background:#111b2e;border:1px solid #25395f;color:#8ab1ff;border-radius:8px;padding:6px 9px;font-size:12px}
 @media(max-width:1100px){.sidebar{position:relative;width:100%;height:auto}.main{margin-left:0;width:100%}.app{display:block}.cards,.layout,.admin-grid{grid-template-columns:1fr}.search{width:100%}.topbar{height:auto;gap:12px;flex-wrap:wrap}}
 </style>
 </head>
@@ -87,7 +92,7 @@ th{color:#a7b4c8;font-weight:500;background:#0b1322}
 
     <div class="menu-title">AKILLI SİSTEM</div>
     <button onclick="showPage('ai',this)">✧ Yapay Zeka Asistanı <span class="new">Yeni</span></button>
-    <button onclick="showPage('projects',this)">✣ Proje Fikirleri</button>
+    <button onclick="showPage('projects',this)">✣ Projeler</button>
     <button onclick="showPage('suggestions',this)">✦ Eksik Parça Önerileri</button>
 
     <div class="menu-title">MESAJLAR</div>
@@ -136,7 +141,7 @@ th{color:#a7b4c8;font-weight:500;background:#0b1322}
             <div><button class="tool" onclick="showPageByName('low')">▽ Filtrele</button> <button class="tool" onclick="render()">☷</button></div>
           </div>
           <table>
-            <thead><tr><th>Fotoğraf</th><th>Malzeme Adı</th><th>Kategori</th><th>Reyon</th><th>Adet</th><th>Durum</th><th>İşlemler</th></tr></thead>
+            <thead><tr><th>Fotoğraf</th><th>Kod</th><th>Malzeme Adı</th><th>Kategori</th><th>Reyon</th><th>Adet</th><th>Durum</th><th>İşlemler</th></tr></thead>
             <tbody id="materialTable"></tbody>
           </table>
           <div class="more">Daha Fazla Göster⌄</div>
@@ -155,7 +160,7 @@ th{color:#a7b4c8;font-weight:500;background:#0b1322}
           <button class="quick" onclick="aiSuggest('projects')">Elimdeki malzemelerle ne yapabilirim?</button>
           <button class="quick" onclick="aiSuggest('missing')">Eksik malzemeleri listele</button>
           <button class="quick" onclick="aiSuggest('idea')">Bana proje fikri ver</button>
-          <button class="quick" onclick="aiSuggest('arduino')">Arduino ile neler yapabilirim?</button>
+          <button class="quick" onclick="showPageByName('projects')">Projelerimi aç</button>
           <div class="chat-input"><input id="aiInput" placeholder="Sorunuzu yazın..."><button onclick="sendAI()">➤</button></div>
         </section>
 
@@ -163,20 +168,47 @@ th{color:#a7b4c8;font-weight:500;background:#0b1322}
           <div class="panel-head"><div><h3>🏅 Proje Fikri Önerisi</h3><p style="color:#38e48b">Yapay Zeka'dan</p></div><button class="tool" onclick="aiSuggest('idea')">↻</button></div>
           <div class="project-card">
             <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400">
-            <div class="project-body"><h3>Akıllı Hava Kalitesi Monitörü</h3><p>DHT11 sensörü ile sıcaklık ve nem ölçen, LCD ekranda gösteren akıllı sistem.</p><div class="tags"><span>Arduino</span><span>DHT11</span><span>LCD 16x2</span><span>Breadboard</span></div><button class="detail" onclick="alert('Detay sayfası sonraki adımda eklenecek.')">Detayları Gör</button></div>
+            <div class="project-body"><h3>Akıllı Hava Kalitesi Monitörü</h3><p>DHT11 sensörü ile sıcaklık ve nem ölçen, LCD ekranda gösteren akıllı sistem.</p><div class="tags"><span>Arduino</span><span>DHT11</span><span>LCD 16x2</span><span>Breadboard</span></div><button class="detail" onclick="showPageByName('projects')">Projeye Git</button></div>
           </div>
         </section>
       </div>
     </div>
   </section>
 
-  <section id="materials" class="page"><div class="panel"><h3>Tüm Malzemeler</h3><p>Kayıtlı tüm malzemeler</p><br><table><thead><tr><th>Fotoğraf</th><th>Malzeme</th><th>Kategori</th><th>Reyon</th><th>Adet</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="allMaterials"></tbody></table></div></section>
+  <section id="materials" class="page">
+    <div class="panel">
+      <h3>Tüm Malzemeler</h3>
+      <p>Kayıtlı tüm malzemeler</p><br>
+      <table><thead><tr><th>Fotoğraf</th><th>Kod</th><th>Malzeme</th><th>Kategori</th><th>Reyon</th><th>Adet</th><th>Durum</th><th>İşlem</th></tr></thead><tbody id="allMaterials"></tbody></table>
+    </div>
+  </section>
+
   <section id="categories" class="page"><div class="panel"><h3>Kategoriler</h3><div id="categoryList" class="admin-grid"></div></div></section>
   <section id="shelves" class="page"><div class="panel"><h3>Reyonlar</h3><div id="shelfList" class="admin-grid"></div></div></section>
   <section id="low" class="page"><div class="panel"><h3>Az Kalanlar</h3><table><tbody id="lowList"></tbody></table></div></section>
   <section id="missing" class="page"><div class="panel"><h3>Eksik Malzemeler</h3><table><tbody id="missingList"></tbody></table></div></section>
-  <section id="ai" class="page"><div class="panel ai"><h3 class="ai-title">✦ Yapay Zeka Asistanı</h3><div class="chat-msg" id="aiPageAnswer">Sorunu yaz, demo cevap üreteyim.</div><div class="chat-input"><input id="aiPageInput" placeholder="Sorunuzu yazın..."><button onclick="aiPageSend()">➤</button></div></div></section>
-  <section id="projects" class="page"><div class="panel"><h3>Proje Fikirleri</h3><p>Malzemelerine göre proje fikirleri burada listelenir.</p><br><button class="add" onclick="aiSuggest('idea')">Proje Fikri Oluştur</button></div></section>
+
+  <section id="ai" class="page">
+    <div class="panel ai">
+      <h3 class="ai-title">✦ Yapay Zeka Asistanı</h3>
+      <div class="chat-msg" id="aiPageAnswer">Sorunu yaz, demo cevap üreteyim.</div>
+      <div class="chat-input"><input id="aiPageInput" placeholder="Sorunuzu yazın..."><button onclick="aiPageSend()">➤</button></div>
+    </div>
+  </section>
+
+  <section id="projects" class="page">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <h3>Projeler</h3>
+          <p>Envanterdeki malzemeleri projelere bağla. Proje bittiğinde kullanılan malzemeler stoktan düşer.</p>
+        </div>
+        <button class="add" onclick="openProjectModal()">＋ Proje Yarat</button>
+      </div>
+      <div id="projectList"></div>
+    </div>
+  </section>
+
   <section id="suggestions" class="page"><div class="panel"><h3>Eksik Parça Önerileri</h3><div id="suggestionList"></div></div></section>
   <section id="messages" class="page"><div class="panel"><h3>Mesajlar</h3><textarea id="messageInput" placeholder="Mesaj yaz..."></textarea><button class="add" onclick="addMessage()">Mesaj Gönder</button><br><br><div id="messageList"></div></div></section>
   <section id="announcements" class="page"><div class="panel"><h3>Duyurular</h3><textarea id="announcementInput" placeholder="Yeni duyuru yaz..."></textarea><button class="add" onclick="addAnnouncement()">Duyuru Ekle</button><br><br><div id="announcementList"></div></div></section>
@@ -184,20 +216,20 @@ th{color:#a7b4c8;font-weight:500;background:#0b1322}
   <section id="admin" class="page">
     <section class="cards">
       <div class="card"><div><small>Admin Malzeme Kontrolü</small><h2 id="adminMaterial">0</h2><small>Tüm kayıtlar</small></div><div class="card-icon purple">♙</div></div>
+      <div class="card"><div><small>Projeler</small><h2 id="adminProjects">0</h2><small>Aktif proje</small></div><div class="card-icon green">✣</div></div>
       <div class="card"><div><small>Eksik Takip</small><h2 id="adminMissing">0</h2><small>Sipariş önerisi</small></div><div class="card-icon red">!</div></div>
-      <div class="card"><div><small>Duyuru</small><h2 id="adminAnn">0</h2><small>Yayınlanan</small></div><div class="card-icon green">☞</div></div>
-      <div class="card"><div><small>Mesaj</small><h2 id="adminMsg">0</h2><small>Gelen mesajlar</small></div><div class="card-icon orange">✉</div></div>
+      <div class="card"><div><small>Duyuru</small><h2 id="adminAnn">0</h2><small>Yayınlanan</small></div><div class="card-icon orange">☞</div></div>
     </section>
     <div class="panel">
       <h3>Admin Yönetim Listesi</h3>
-      <p>Admin buradan malzemeleri, duyuruları, mesajları ve stok durumunu takip eder.</p><br>
+      <p>Admin buradan malzemeleri, projeleri, duyuruları, mesajları ve stok durumunu takip eder.</p><br>
       <table><thead><tr><th>Alan</th><th>Durum</th><th>İşlem</th></tr></thead>
       <tbody>
         <tr><td>Malzemeler</td><td id="adminMaterialsStatus">0 kayıt</td><td><button class="tool" onclick="showPageByName('materials')">Aç</button></td></tr>
+        <tr><td>Projeler</td><td id="adminProjectStatus">0 kayıt</td><td><button class="tool" onclick="showPageByName('projects')">Aç</button></td></tr>
         <tr><td>Az Kalanlar</td><td id="adminLowStatus">0 kayıt</td><td><button class="tool" onclick="showPageByName('low')">Aç</button></td></tr>
         <tr><td>Eksik Malzemeler</td><td id="adminMissingStatus">0 kayıt</td><td><button class="tool" onclick="showPageByName('missing')">Aç</button></td></tr>
         <tr><td>Duyurular</td><td id="adminAnnStatus">0 kayıt</td><td><button class="tool" onclick="showPageByName('announcements')">Aç</button></td></tr>
-        <tr><td>Mesajlar</td><td id="adminMsgStatus">0 kayıt</td><td><button class="tool" onclick="showPageByName('messages')">Aç</button></td></tr>
       </tbody></table>
     </div>
   </section>
@@ -212,6 +244,7 @@ th{color:#a7b4c8;font-weight:500;background:#0b1322}
 <div class="modal" id="modal">
   <div class="modal-box">
     <h3>Malzeme Ekle</h3>
+    <input id="mCode" placeholder="Otomatik kod oluşacak" readonly>
     <input id="mName" placeholder="Malzeme adı">
     <select id="mCategory">
       <option>Elektronik</option><option>Ekranlar</option><option>Kablolar</option><option>Kartlar</option><option>Sensörler</option><option>Motorlar</option>
@@ -228,18 +261,144 @@ th{color:#a7b4c8;font-weight:500;background:#0b1322}
   </div>
 </div>
 
+<div class="modal" id="projectModal">
+  <div class="modal-box">
+    <h3>Proje Yarat</h3>
+    <input id="projectName" placeholder="Proje adı">
+    <textarea id="projectDesc" placeholder="Proje açıklaması"></textarea>
+
+    <h3 style="font-size:16px;margin:15px 0 10px">Gerekli Malzemeler</h3>
+    <div id="projectMaterialInputs"></div>
+
+    <button class="tool" onclick="addProjectMaterialRow()">＋ Malzeme Satırı Ekle</button>
+
+    <div class="modal-actions" style="margin-top:15px">
+      <button class="cancel" onclick="closeProjectModal()">İptal</button>
+      <button class="save" onclick="createProject()">Projeyi Kaydet</button>
+    </div>
+  </div>
+</div>
+
 <script>
 let materials=JSON.parse(localStorage.getItem("depoMaterials"))||[];
 let announcements=JSON.parse(localStorage.getItem("depoAnnouncements"))||[];
 let messages=JSON.parse(localStorage.getItem("depoMessages"))||[];
+let projects=JSON.parse(localStorage.getItem("depoProjects"))||[];
 
 function save(){
  localStorage.setItem("depoMaterials",JSON.stringify(materials));
  localStorage.setItem("depoAnnouncements",JSON.stringify(announcements));
  localStorage.setItem("depoMessages",JSON.stringify(messages));
+ localStorage.setItem("depoProjects",JSON.stringify(projects));
 }
-function openModal(){modal.style.display="flex"}
+
+function generateCode(){
+ let len=Math.floor(Math.random()*3)+6;
+ let chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+ let code="";
+ for(let i=0;i<len;i++) code+=chars[Math.floor(Math.random()*chars.length)];
+ if(materials.some(m=>m.code===code)) return generateCode();
+ return code;
+}
+
+function openModal(){
+ mCode.value=generateCode();
+ modal.style.display="flex";
+}
 function closeModal(){modal.style.display="none"}
+
+function openProjectModal(){
+ if(materials.length===0){alert("Önce envantere malzeme ekle.");return}
+ projectName.value="";
+ projectDesc.value="";
+ projectMaterialInputs.innerHTML="";
+ addProjectMaterialRow();
+ projectModal.style.display="flex";
+}
+function closeProjectModal(){projectModal.style.display="none"}
+
+function addProjectMaterialRow(){
+ let row=document.createElement("div");
+ row.className="project-material";
+ row.innerHTML=`
+  <select class="pm-select">
+    ${materials.map((m,i)=>`<option value="${i}">${m.name} — Stok: ${m.count}</option>`).join("")}
+  </select>
+  <input class="pm-count" type="number" placeholder="Adet" min="1" value="1">
+  <button class="tool" onclick="this.parentElement.remove()">Sil</button>
+ `;
+ projectMaterialInputs.appendChild(row);
+}
+
+function createProject(){
+ let name=projectName.value.trim();
+ let desc=projectDesc.value.trim();
+
+ if(!name){alert("Proje adı yaz.");return}
+
+ let rows=[...document.querySelectorAll(".project-material")];
+ let items=[];
+
+ for(let r of rows){
+  let materialIndex=Number(r.querySelector(".pm-select").value);
+  let count=Number(r.querySelector(".pm-count").value);
+  if(count<=0){alert("Malzeme adedi 1 veya daha fazla olmalı.");return}
+  let m=materials[materialIndex];
+  items.push({
+    code:m.code,
+    name:m.name,
+    count:count
+  });
+ }
+
+ projects.push({
+  id:Date.now(),
+  name,
+  desc,
+  items,
+  status:"Devam Ediyor",
+  created:new Date().toLocaleString("tr-TR")
+ });
+
+ save();
+ render();
+ closeProjectModal();
+}
+
+function finishProject(id){
+ let project=projects.find(p=>p.id===id);
+ if(!project)return;
+
+ for(let item of project.items){
+  let m=materials.find(x=>x.code===item.code);
+  if(!m){alert(item.name+" artık envanterde yok.");return}
+  if(Number(m.count)<Number(item.count)){
+    alert(item.name+" stoğu yetersiz. Gerekli: "+item.count+" / Mevcut: "+m.count);
+    return;
+  }
+ }
+
+ if(!confirm("Proje bitti olarak işaretlensin mi? Kullanılan malzemeler stoktan düşecek."))return;
+
+ for(let item of project.items){
+  let m=materials.find(x=>x.code===item.code);
+  m.count=Number(m.count)-Number(item.count);
+ }
+
+ project.status="Bitti";
+ project.finished=new Date().toLocaleString("tr-TR");
+
+ save();
+ render();
+}
+
+function deleteProject(id){
+ if(confirm("Proje silinsin mi?")){
+  projects=projects.filter(p=>p.id!==id);
+  save();
+  render();
+ }
+}
 
 function showPage(id,btn){
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
@@ -267,12 +426,24 @@ function getStatus(m){
  return["Yeterli","yeter"];
 }
 function money(n){return"₺"+Number(n).toLocaleString("tr-TR")}
+
 function addMaterial(){
  if(!mName.value||!mShelf.value){alert("Malzeme adı ve reyon yaz.");return}
- materials.push({name:mName.value,category:mCategory.value,shelf:mShelf.value,count:Number(mCount.value||0),min:Number(mMin.value||1),price:Number(mPrice.value||0),photo:mPhoto.value||"https://via.placeholder.com/100",created:new Date().toLocaleDateString("tr-TR")});
- mName.value=mShelf.value=mCount.value=mMin.value=mPrice.value=mPhoto.value="";
+ materials.push({
+  code:mCode.value||generateCode(),
+  name:mName.value,
+  category:mCategory.value,
+  shelf:mShelf.value,
+  count:Number(mCount.value||0),
+  min:Number(mMin.value||1),
+  price:Number(mPrice.value||0),
+  photo:mPhoto.value||"https://via.placeholder.com/100",
+  created:new Date().toLocaleDateString("tr-TR")
+ });
+ mCode.value=mName.value=mShelf.value=mCount.value=mMin.value=mPrice.value=mPhoto.value="";
  save();render();closeModal();
 }
+
 function deleteMaterial(i){if(confirm("Malzeme silinsin mi?")){materials.splice(i,1);save();render()}}
 function plus(i){materials[i].count++;save();render()}
 function minus(i){if(materials[i].count>0)materials[i].count--;save();render()}
@@ -281,6 +452,7 @@ function row(m,i){
  let s=getStatus(m);
  return `<tr>
  <td><img class="photo" src="${m.photo}" onerror="this.src='https://via.placeholder.com/100'"></td>
+ <td><span class="code-pill">${m.code||"KOD-YOK"}</span></td>
  <td>${m.name}</td>
  <td><span class="tag ${categoryClass(m.category)}">${m.category}</span></td>
  <td>${m.shelf}</td>
@@ -302,35 +474,62 @@ function addMessage(){
  messageInput.value="";
  save();render();
 }
+
 function aiSuggest(type){
  if(type==="missing"){
    let miss=materials.filter(m=>m.count<=0);
    aiAnswer.innerHTML=miss.length?`Eksik malzemeler:<br>${miss.map(m=>"• "+m.name).join("<br>")}`:"Eksik malzeme yok.";
  }
- if(type==="projects") aiAnswer.innerHTML="Elindeki malzemelere göre Arduino başlangıç projeleri, LCD ekranlı gösterge, sensör paneli ve mini otomasyon yapılabilir.";
+ if(type==="projects") aiAnswer.innerHTML="Projeler sayfasından yeni proje yaratabilir, envanterden malzeme seçebilir ve proje bitince stokları otomatik düşürebilirsin.";
  if(type==="idea") aiAnswer.innerHTML="Proje fikri: LCD ekranlı sıcaklık-nem takip paneli. DHT11, Arduino, LCD ve jumper kablolar kullanılır.";
- if(type==="arduino") aiAnswer.innerHTML="Arduino ile sensör okuma, motor kontrol, ekranlı panel, otomasyon, robotik ve stok takip destekli projeler yapılabilir.";
 }
 function sendAI(){aiAnswer.innerHTML=aiInput.value?`Demo cevap: "${aiInput.value}" sorusuna göre malzemelerini kontrol edip öneri hazırlayabilirim.`:"Bir soru yaz."}
 function aiPageSend(){aiPageAnswer.innerHTML=aiPageInput.value?`Demo cevap: ${aiPageInput.value}`:"Soru yazmalısın."}
 
 function resetSystem(){
  if(confirm("Tüm demo verileri sıfırlansın mı?")){
-  materials=[];announcements=[];messages=[];save();render();
+  materials=[];announcements=[];messages=[];projects=[];save();render();
  }
+}
+
+function renderProjects(){
+ if(projects.length===0){
+  projectList.innerHTML=`<div class="empty">Henüz proje yok. “Proje Yarat” butonuyla oluştur.</div>`;
+  return;
+ }
+
+ projectList.innerHTML=projects.map(p=>`
+  <div class="project-box">
+    <div class="panel-head">
+      <div>
+        <h3>${p.name}</h3>
+        <p>${p.desc||"Açıklama yok."}</p>
+        <p><span class="status ${p.status==="Bitti"?"yeter":"az"}">${p.status}</span> <small>${p.created}</small></p>
+      </div>
+      <div>
+        ${p.status!=="Bitti"?`<button class="add" onclick="finishProject(${p.id})">Proje Bitti</button>`:""}
+        <button class="tool" onclick="deleteProject(${p.id})">Sil</button>
+      </div>
+    </div>
+    <b>Gerekli Malzemeler:</b>
+    <ul>
+      ${p.items.map(i=>`<li>${i.name} — ${i.count} adet</li>`).join("")}
+    </ul>
+  </div>
+ `).join("");
 }
 
 function render(){
  let q=(searchInput.value||"").toLowerCase();
- let list=materials.filter(m=>m.name.toLowerCase().includes(q)||m.category.toLowerCase().includes(q)||m.shelf.toLowerCase().includes(q));
+ let list=materials.filter(m=>(m.name||"").toLowerCase().includes(q)||(m.category||"").toLowerCase().includes(q)||(m.shelf||"").toLowerCase().includes(q)||(m.code||"").toLowerCase().includes(q));
  let low=materials.filter(m=>m.count>0&&m.count<=m.min);
  let missing=materials.filter(m=>m.count<=0);
  let total=materials.reduce((a,b)=>a+(b.count*b.price),0);
 
- materialTable.innerHTML=list.length?list.map(row).join(""):`<tr><td colspan="7" class="empty">Henüz malzeme eklenmedi.</td></tr>`;
- allMaterials.innerHTML=materials.length?materials.map(row).join(""):`<tr><td colspan="7" class="empty">Henüz malzeme yok.</td></tr>`;
- lowList.innerHTML=low.length?low.map((m,i)=>row(m,materials.indexOf(m))).join(""):`<tr><td class="empty">Az kalan malzeme yok.</td></tr>`;
- missingList.innerHTML=missing.length?missing.map((m,i)=>row(m,materials.indexOf(m))).join(""):`<tr><td class="empty">Eksik malzeme yok.</td></tr>`;
+ materialTable.innerHTML=list.length?list.map(row).join(""):`<tr><td colspan="8" class="empty">Henüz malzeme eklenmedi.</td></tr>`;
+ allMaterials.innerHTML=materials.length?materials.map(row).join(""):`<tr><td colspan="8" class="empty">Henüz malzeme yok.</td></tr>`;
+ lowList.innerHTML=low.length?low.map((m)=>row(m,materials.indexOf(m))).join(""):`<tr><td class="empty">Az kalan malzeme yok.</td></tr>`;
+ missingList.innerHTML=missing.length?missing.map((m)=>row(m,materials.indexOf(m))).join(""):`<tr><td class="empty">Eksik malzeme yok.</td></tr>`;
 
  totalCount.innerText=materials.length;
  lowCount.innerText=low.length;
@@ -348,20 +547,22 @@ function render(){
  suggestionList.innerHTML=missing.length?missing.map(m=>`<div class="ann"><div class="ann-icon red">!</div><div class="ann-text"><b>${m.name}</b><br><small>Bu malzeme eksik. Sipariş listesine eklenmeli.</small></div></div>`).join(""):"<p>Eksik parça önerisi yok.</p>";
 
  adminMaterial.innerText=materials.length;
+ adminProjects.innerText=projects.length;
  adminMissing.innerText=missing.length;
  adminAnn.innerText=announcements.length;
- adminMsg.innerText=messages.length;
  adminMaterialsStatus.innerText=materials.length+" kayıt";
+ adminProjectStatus.innerText=projects.length+" kayıt";
  adminLowStatus.innerText=low.length+" kayıt";
  adminMissingStatus.innerText=missing.length+" kayıt";
  adminAnnStatus.innerText=announcements.length+" kayıt";
- adminMsgStatus.innerText=messages.length+" kayıt";
 
- reportBox.innerHTML=`<p>Toplam malzeme: <b>${materials.length}</b></p><p>Az kalan: <b>${low.length}</b></p><p>Eksik: <b>${missing.length}</b></p><p>Toplam değer: <b>${money(total)}</b></p>`;
+ reportBox.innerHTML=`<p>Toplam malzeme: <b>${materials.length}</b></p><p>Toplam proje: <b>${projects.length}</b></p><p>Az kalan: <b>${low.length}</b></p><p>Eksik: <b>${missing.length}</b></p><p>Toplam değer: <b>${money(total)}</b></p>`;
+
+ renderProjects();
 }
 searchInput.addEventListener("input",render);
 render();
 </script>
 
 </body>
-</html> 
+</html>
