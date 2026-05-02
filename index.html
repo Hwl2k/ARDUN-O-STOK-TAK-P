@@ -3,58 +3,63 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Akıllı Depo</title>
+<title>Akıllı Depo Takip Sistemi</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
 body{background:radial-gradient(circle at top left,#1e3a8a,#0f172a 45%,#020617);color:#f8fafc}
-.login{min-height:100vh;display:flex;align-items:center;justify-content:center}
-.login-box,.panel,.card,.modal-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(18px);box-shadow:0 20px 55px rgba(0,0,0,.25)}
-.login-box{width:400px;border-radius:24px;padding:30px}
-input,textarea,select{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(15,23,42,.75);color:white;margin-bottom:10px}
 button{cursor:pointer}
-.btn,.add{border:0;border-radius:14px;padding:12px 16px;color:white;font-weight:bold;background:linear-gradient(90deg,#2563eb,#7c3aed)}
-.red{background:linear-gradient(90deg,#dc2626,#f97316)}
-.green{background:linear-gradient(90deg,#16a34a,#22c55e)}
-.dark{background:#111827}
+input,textarea,select{width:100%;padding:13px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(15,23,42,.8);color:white;margin-bottom:10px}
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center}
+.box,.panel,.card,.modal-box{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(18px);box-shadow:0 20px 55px rgba(0,0,0,.25)}
+.box{width:410px;border-radius:26px;padding:30px}
 .app{display:none;min-height:100vh}
-.sidebar{width:270px;position:fixed;height:100vh;background:rgba(2,6,23,.75);border-right:1px solid rgba(255,255,255,.15);padding:24px}
+.sidebar{width:270px;position:fixed;height:100vh;background:rgba(2,6,23,.78);border-right:1px solid rgba(255,255,255,.14);padding:24px}
 .logo{font-size:25px;font-weight:bold;margin-bottom:30px;color:#93c5fd}
 .menu button{width:100%;background:transparent;color:#dbeafe;border:0;text-align:left;padding:14px;border-radius:14px;margin-bottom:8px}
 .menu button.active,.menu button:hover{background:linear-gradient(90deg,#2563eb,#7c3aed)}
 .main{margin-left:270px;padding:26px}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}
-.user-badge{padding:11px 14px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);margin-right:10px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:12px}
+.btn,.add{border:0;border-radius:14px;padding:12px 16px;color:white;font-weight:bold;background:linear-gradient(90deg,#2563eb,#7c3aed)}
+.red{background:linear-gradient(90deg,#dc2626,#f97316)}
+.green{background:linear-gradient(90deg,#16a34a,#22c55e)}
+.dark{background:#111827}
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:20px}
 .card{border-radius:24px;padding:22px}
 .card small{color:#cbd5e1}.card h2{font-size:32px;margin-top:10px}
 .panel{border-radius:24px;padding:22px;margin-bottom:18px}
 .page{display:none}.page.active{display:block}
-.list-item{padding:16px;border-radius:16px;background:rgba(255,255,255,.08);margin-bottom:10px;border:1px solid rgba(255,255,255,.12)}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);align-items:center;justify-content:center;z-index:9}
-.modal-box{width:520px;max-height:90vh;overflow:auto;border-radius:24px;padding:24px}
+.item{padding:16px;border-radius:16px;background:rgba(255,255,255,.08);margin-bottom:10px;border:1px solid rgba(255,255,255,.12)}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);align-items:center;justify-content:center;z-index:99}
+.modal-box{width:540px;max-height:90vh;overflow:auto;border-radius:24px;padding:24px}
 .row{display:flex;gap:10px}
+.badge{display:inline-block;padding:5px 10px;border-radius:999px;background:#2563eb;font-size:13px}
 .hidden{display:none!important}
-.badge{padding:5px 10px;border-radius:999px;background:#2563eb;font-size:13px}
+.user-badge{padding:11px 14px;border-radius:14px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16)}
+img.thumb{width:85px;height:60px;object-fit:cover;border-radius:12px;background:white}
 @media(max-width:900px){.sidebar{position:relative;width:100%;height:auto}.main{margin-left:0}.cards{grid-template-columns:1fr}.topbar{display:block}.app{display:block}}
 </style>
 </head>
+
 <body>
 
 <div class="login" id="loginPage">
-  <div class="login-box">
+  <div class="box">
     <h1>⚡ Akıllı Depo</h1>
-    <p>Admin / Üye giriş sistemi</p><br>
+    <p>Depo takip sistemi</p><br>
     <input id="username" placeholder="Kullanıcı adı">
     <input id="password" type="password" placeholder="Şifre">
     <div class="row">
       <button class="btn green" onclick="login()">Giriş Yap</button>
       <button class="btn dark" onclick="register()">Üye Ol</button>
     </div>
-    <br><small>Admin: <b>admin</b> / Şifre: <b>1234</b></small>
+    <br>
+    <small>Admin: <b>admin</b> / Şifre: <b>1234</b></small>
   </div>
 </div>
 
 <div class="app" id="app">
+
 <aside class="sidebar">
   <div class="logo">⚡ Akıllı Depo</div>
   <div class="menu">
@@ -70,6 +75,7 @@ button{cursor:pointer}
 </aside>
 
 <main class="main">
+
   <div class="topbar">
     <input id="globalSearch" placeholder="Sorgula: Arduino 10 var mı?">
     <div>
@@ -82,22 +88,23 @@ button{cursor:pointer}
   <section id="dashboard" class="page active">
     <div class="cards">
       <div class="card"><small>Toplam Malzeme</small><h2 id="countMaterials">0</h2></div>
+      <div class="card"><small>Toplam Stok</small><h2 id="countStock">0</h2></div>
       <div class="card"><small>Toplam Proje</small><h2 id="countProjects">0</h2></div>
       <div class="card"><small>Sipariş</small><h2 id="countOrders">0</h2></div>
-      <div class="card"><small>Rol</small><h2 id="roleText">-</h2></div>
     </div>
+
     <div class="panel">
       <h2>Hoş geldin 👋</h2>
-      <p>Ana sayfadaki tüm düğmeler aktif. Proje oluşturabilir, malzeme sorgulayabilir, eksikleri sipariş listesine atabilirsin.</p>
+      <p>Buradan hızlıca malzeme ekleyebilir, proje oluşturabilir ve sipariş listesini takip edebilirsin.</p><br>
+      <button class="add" onclick="openMaterialModal()">+ Hızlı Malzeme Ekle</button>
+      <button class="add" onclick="openProjectModal()">+ Proje Oluştur</button>
     </div>
-    <br>
-<button class="add" onclick="openMaterialModal()">+ Hızlı Malzeme Ekle</button>
   </section>
 
   <section id="materials" class="page">
     <div class="panel">
       <h2>Malzemeler</h2><br>
-      <div id="materialsList">Henüz malzeme yok.</div>
+      <div id="materialsList"></div>
     </div>
   </section>
 
@@ -107,14 +114,14 @@ button{cursor:pointer}
         <h2 style="flex:1">Projeler</h2>
         <button class="add" onclick="openProjectModal()">+ Proje Oluştur</button>
       </div><br>
-      <div id="projectsList">Henüz proje yok.</div>
+      <div id="projectsList"></div>
     </div>
   </section>
 
   <section id="orders" class="page">
     <div class="panel">
       <h2>Sipariş Listesi</h2><br>
-      <div id="ordersList">Sipariş yok.</div>
+      <div id="ordersList"></div>
     </div>
   </section>
 
@@ -123,14 +130,14 @@ button{cursor:pointer}
       <h2>Sohbet</h2><br>
       <textarea id="messageInput" placeholder="Mesaj yaz..."></textarea>
       <button class="btn green" onclick="sendMessage()">Gönder</button><br><br>
-      <div id="messagesList">Henüz mesaj yok.</div>
+      <div id="messagesList"></div>
     </div>
   </section>
 
   <section id="admin" class="page">
     <div class="panel">
       <h2>💎 Admin Paneli</h2>
-      <p>Admin tüm sistemi buradan takip eder.</p><br>
+      <p>Admin tüm sistemi buradan kontrol eder.</p><br>
       <button class="btn" onclick="openMaterialModal()">Malzeme Ekle</button>
       <button class="btn" onclick="openProjectModal()">Proje Oluştur</button>
       <button class="btn red" onclick="resetSystem()">Sistemi Sıfırla</button>
@@ -140,13 +147,14 @@ button{cursor:pointer}
       <div id="usersList"></div>
     </div>
   </section>
+
 </main>
 </div>
 
 <div class="modal" id="materialModal">
   <div class="modal-box">
     <h2>Yeni Malzeme</h2>
-    <input id="mCode" readonly placeholder="Otomatik kod">
+    <input id="mCode" readonly placeholder="Otomatik 8 haneli kod">
     <input id="mName" placeholder="Malzeme adı">
     <input id="mStock" type="number" placeholder="Stok adedi">
     <input id="mMin" type="number" placeholder="Minimum stok">
@@ -162,7 +170,7 @@ button{cursor:pointer}
     <input id="pName" placeholder="Proje adı">
     <textarea id="pDesc" placeholder="Proje açıklaması"></textarea>
     <input id="pPhoto" placeholder="Fotoğraf linki opsiyonel">
-    <h3>Gereken Malzemeler</h3>
+    <h3>Gereken Malzemeler</h3><br>
     <div id="projectRows"></div>
     <button class="btn dark" onclick="addProjectRow()">+ Malzeme Satırı</button><br><br>
     <button class="btn green" onclick="createProject()">Projeyi Kaydet</button>
@@ -195,103 +203,256 @@ function save(){
  localStorage.setItem("orders",JSON.stringify(orders));
  localStorage.setItem("messages",JSON.stringify(messages));
 }
+
 function code(){
-  return Math.floor(10000000 + Math.random() * 90000000).toString();
+ return Math.floor(10000000 + Math.random() * 90000000).toString();
 }
+
 function login(){
  let f=users.find(u=>u.name===username.value.trim()&&u.pass===password.value.trim());
- if(!f)return alert("Giriş hatalı.");
- currentUser=f;loginPage.style.display="none";app.style.display="block";setupRole();render();
+ if(!f)return alert("Kullanıcı adı veya şifre yanlış.");
+ currentUser=f;
+ loginPage.style.display="none";
+ app.style.display="block";
+ setupRole();
+ render();
 }
+
 function register(){
- if(!username.value||!password.value)return alert("Bilgileri yaz.");
- if(users.some(u=>u.name===username.value))return alert("Bu kullanıcı var.");
- users.push({name:username.value,pass:password.value,role:"user"});save();alert("Üye oldun, giriş yap.");
+ if(!username.value||!password.value)return alert("Kullanıcı adı ve şifre yaz.");
+ if(users.some(u=>u.name===username.value))return alert("Bu kullanıcı zaten var.");
+ users.push({name:username.value,pass:password.value,role:"user"});
+ save();
+ alert("Üyelik oluşturuldu. Şimdi giriş yap.");
 }
+
 function setupRole(){
  userInfo.innerHTML=(currentUser.role==="admin"?"💎 ":"👤 ")+`<b>${currentUser.name}</b>`;
- roleText.innerText=currentUser.role;
  adminBtn.classList.toggle("hidden",currentUser.role!=="admin");
  newBtn.classList.toggle("hidden",currentUser.role!=="admin");
 }
+
 function logout(){location.reload()}
+
 function openPage(id,btn){
- if(id==="admin"&&currentUser.role!=="admin")return alert("Sadece admin.");
+ if(id==="admin"&&currentUser.role!=="admin")return alert("Admin paneline sadece admin girebilir.");
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  document.getElementById(id).classList.add("active");
  document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
  if(btn)btn.classList.add("active");
  render();
 }
-function closeModals(){document.querySelectorAll(".modal").forEach(m=>m.style.display="none")}
-function openMaterialModal(){
- if(currentUser.role!=="admin")return alert("Sadece admin malzeme ekler.");
- mCode.value=code();materialModal.style.display="flex";
+
+function closeModals(){
+ document.querySelectorAll(".modal").forEach(m=>m.style.display="none");
 }
+
+function openMaterialModal(){
+ if(currentUser.role!=="admin")return alert("Sadece admin malzeme ekleyebilir.");
+ mCode.value=code();
+ materialModal.style.display="flex";
+}
+
 function addMaterial(){
  if(!mName.value)return alert("Malzeme adı yaz.");
- materials.push({code:mCode.value,name:mName.value,stock:Number(mStock.value||0),min:Number(mMin.value||1),photo:mPhoto.value||"",date:new Date().toLocaleString("tr-TR")});
- mName.value=mStock.value=mMin.value=mPhoto.value="";closeModals();save();render();
+ materials.push({
+  code:mCode.value,
+  name:mName.value,
+  stock:Number(mStock.value||0),
+  min:Number(mMin.value||1),
+  photo:mPhoto.value||"",
+  date:new Date().toLocaleString("tr-TR")
+ });
+ mName.value=mStock.value=mMin.value=mPhoto.value="";
+ closeModals();
+ save();
+ render();
 }
-function deleteMaterial(i){if(confirm("Silinsin mi?")){materials.splice(i,1);save();render()}}
+
+function deleteMaterial(i){
+ if(currentUser.role!=="admin")return alert("Sadece admin silebilir.");
+ if(confirm("Malzeme silinsin mi?")){
+  materials.splice(i,1);
+  save();
+  render();
+ }
+}
+
+function plusStock(i){materials[i].stock++;save();render()}
+function minusStock(i){if(materials[i].stock>0)materials[i].stock--;save();render()}
+
 function openProjectModal(){
- pName.value=pDesc.value=pPhoto.value="";projectRows.innerHTML="";addProjectRow();projectModal.style.display="flex";
+ pName.value=pDesc.value=pPhoto.value="";
+ projectRows.innerHTML="";
+ addProjectRow();
+ projectModal.style.display="flex";
 }
+
 function addProjectRow(){
- let d=document.createElement("div");d.className="row";
- d.innerHTML=`<input class="needName" placeholder="Malzeme adı"><input class="needCount" type="number" placeholder="Adet"><button class="btn red" onclick="this.parentElement.remove()">Sil</button>`;
+ let d=document.createElement("div");
+ d.className="row";
+ d.innerHTML=`
+   <input class="needName" placeholder="Malzeme adı">
+   <input class="needCount" type="number" placeholder="Adet">
+   <button class="btn red" onclick="this.parentElement.remove()">Sil</button>
+ `;
  projectRows.appendChild(d);
 }
+
 function createProject(){
  if(!pName.value)return alert("Proje adı yaz.");
- let needs=[...document.querySelectorAll("#projectRows .row")].map(r=>({name:r.querySelector(".needName").value.trim(),count:Number(r.querySelector(".needCount").value||1)})).filter(x=>x.name);
+
+ let needs=[...document.querySelectorAll("#projectRows .row")]
+ .map(r=>({
+  name:r.querySelector(".needName").value.trim(),
+  count:Number(r.querySelector(".needCount").value||1)
+ }))
+ .filter(x=>x.name);
+
  needs.forEach(n=>{
   let m=materials.find(x=>x.name.toLowerCase()===n.name.toLowerCase());
-  if(!m)orders.push({name:n.name,count:n.count,reason:"Projede lazım ama envanterde yok."});
-  else if(m.stock<n.count)orders.push({name:n.name,count:n.count-m.stock,reason:"Projede lazım ama stok yetersiz."});
+  if(!m){
+   orders.push({name:n.name,count:n.count,reason:"Projede lazım ama envanterde yok."});
+  }else if(m.stock<n.count){
+   orders.push({name:n.name,count:n.count-m.stock,reason:"Projede lazım ama stok yetersiz."});
+  }
  });
- projects.push({id:Date.now(),name:pName.value,desc:pDesc.value,photo:pPhoto.value,needs,status:"Devam Ediyor"});
- closeModals();save();render();
+
+ projects.push({
+  id:Date.now(),
+  name:pName.value,
+  desc:pDesc.value,
+  photo:pPhoto.value,
+  needs,
+  status:"Devam Ediyor"
+ });
+
+ closeModals();
+ save();
+ render();
 }
+
 function finishProject(id){
  let p=projects.find(x=>x.id===id);
+ if(!p)return;
+
  for(let n of p.needs){
   let m=materials.find(x=>x.name.toLowerCase()===n.name.toLowerCase());
-  if(m&&m.stock>=n.count)m.stock-=n.count;
+  if(m && m.stock>=n.count){
+   m.stock-=n.count;
+  }
  }
- p.status="Bitti";save();render();
+
+ p.status="Bitti";
+ save();
+ render();
 }
+
 function smartQuery(){
  let q=globalSearch.value.trim();
  if(!q)return;
+
  let parts=q.match(/(.+?)\s+(\d+)/);
- let name=parts?parts[1].replace("var mı","").trim():q.replace("var mı","").trim();
- let amount=parts?Number(parts[2]):1;
+ let name=parts ? parts[1].replace("var mı","").trim() : q.replace("var mı","").trim();
+ let amount=parts ? Number(parts[2]) : 1;
+
  let m=materials.find(x=>x.name.toLowerCase().includes(name.toLowerCase()));
- if(m){alert(`${m.name} sistemde var. Stok: ${m.stock}`)}
- else{
+
+ if(m){
+  alert(`${m.name} sistemde var. Stok: ${m.stock}`);
+ }else{
   materials.push({code:code(),name,stock:0,min:1,photo:"",date:new Date().toLocaleString("tr-TR")});
   orders.push({name,count:amount,reason:"Sorgulandı ama envanterde yok."});
-  alert("Sistemde yoktu. Yeni kayıt ve sipariş listesi oluşturuldu.");
+  alert("Sistemde yoktu. Yeni kayıt açıldı ve sipariş listesine eklendi.");
  }
- save();render();
+
+ save();
+ render();
 }
-function sendMessage(){if(!messageInput.value)return;messages.push({from:currentUser.name,text:messageInput.value,date:new Date().toLocaleTimeString("tr-TR")});messageInput.value="";save();render()}
-function openProfile(){profileName.value=currentUser.name;profilePass.value="";profileModal.style.display="flex"}
+
+function sendMessage(){
+ if(!messageInput.value)return;
+ messages.push({from:currentUser.name,text:messageInput.value,date:new Date().toLocaleTimeString("tr-TR")});
+ messageInput.value="";
+ save();
+ render();
+}
+
+function openProfile(){
+ profileName.value=currentUser.name;
+ profilePass.value="";
+ profileModal.style.display="flex";
+}
+
 function saveProfile(){
  if(profileName.value)currentUser.name=profileName.value;
  if(profilePass.value)currentUser.pass=profilePass.value;
- save();setupRole();closeModals();render();
+ save();
+ setupRole();
+ closeModals();
+ render();
 }
-function resetSystem(){if(confirm("Sıfırlansın mı?")){materials=[];projects=[];orders=[];messages=[];save();render()}}
+
+function resetSystem(){
+ if(confirm("Tüm sistem verileri sıfırlansın mı?")){
+  materials=[];
+  projects=[];
+  orders=[];
+  messages=[];
+  save();
+  render();
+ }
+}
+
 function render(){
- countMaterials.innerText=materials.length;countProjects.innerText=projects.length;countOrders.innerText=orders.length;
- materialsList.innerHTML=materials.length?materials.map((m,i)=>`<div class="list-item">${m.photo?`<img src="${m.photo}" style="width:80px;height:55px;object-fit:cover;border-radius:10px"><br>`:""}<b>${m.name}</b> <span class="badge">${m.code}</span><br>Stok: ${m.stock} / Min: ${m.min}<br>${currentUser.role==="admin"?`<button class="btn red" onclick="deleteMaterial(${i})">Sil</button>`:""}</div>`).join(""):"Henüz malzeme yok.";
- projectsList.innerHTML=projects.length?projects.map(p=>`<div class="list-item">${p.photo?`<img src="${p.photo}" style="width:100px;border-radius:10px"><br>`:""}<h3>${p.name}</h3><p>${p.desc}</p><span class="badge">${p.status}</span><br><br><b>Gerekenler:</b><br>${p.needs.map(n=>`• ${n.name} - ${n.count} adet`).join("<br>")}<br><br>${p.status!=="Bitti"?`<button class="btn green" onclick="finishProject(${p.id})">Proje Bitti</button>`:""}</div>`).join(""):"Henüz proje yok.";
- ordersList.innerHTML=orders.length?orders.map((o,i)=>`<div class="list-item"><b>${o.name}</b> - ${o.count} adet<br><small>${o.reason}</small><br><button class="btn red" onclick="orders.splice(${i},1);save();render()">Sil</button></div>`).join(""):"Sipariş yok.";
- messagesList.innerHTML=messages.length?messages.map(m=>`<div class="list-item"><b>${m.from}</b>: ${m.text}<br><small>${m.date}</small></div>`).join(""):"Henüz mesaj yok.";
- usersList.innerHTML=users.map((u,i)=>`<div class="list-item">${u.role==="admin"?"💎":"👤"} <b>${u.name}</b> / ${u.role}</div>`).join("");
+ countMaterials.innerText=materials.length;
+ countStock.innerText=materials.reduce((a,b)=>a+Number(b.stock),0);
+ countProjects.innerText=projects.length;
+ countOrders.innerText=orders.length;
+
+ materialsList.innerHTML=materials.length?materials.map((m,i)=>`
+ <div class="item">
+  ${m.photo?`<img class="thumb" src="${m.photo}"><br><br>`:""}
+  <b>${m.name}</b> <span class="badge">${m.code}</span><br>
+  Stok: ${m.stock} / Min: ${m.min}<br><br>
+  ${currentUser.role==="admin"?`
+    <button class="btn green" onclick="plusStock(${i})">+ Stok</button>
+    <button class="btn dark" onclick="minusStock(${i})">- Stok</button>
+    <button class="btn red" onclick="deleteMaterial(${i})">Sil</button>
+  `:""}
+ </div>
+ `).join(""):"Henüz malzeme yok.";
+
+ projectsList.innerHTML=projects.length?projects.map(p=>`
+ <div class="item">
+  ${p.photo?`<img class="thumb" src="${p.photo}"><br><br>`:""}
+  <h3>${p.name}</h3>
+  <p>${p.desc||"Açıklama yok."}</p>
+  <span class="badge">${p.status}</span><br><br>
+  <b>Gerekenler:</b><br>
+  ${p.needs.map(n=>`• ${n.name} - ${n.count} adet`).join("<br>")}
+  <br><br>
+  ${p.status!=="Bitti"?`<button class="btn green" onclick="finishProject(${p.id})">Proje Bitti</button>`:""}
+ </div>
+ `).join(""):"Henüz proje yok.";
+
+ ordersList.innerHTML=orders.length?orders.map((o,i)=>`
+ <div class="item">
+  <b>${o.name}</b> - ${o.count} adet<br>
+  <small>${o.reason}</small><br><br>
+  <button class="btn red" onclick="orders.splice(${i},1);save();render()">Sil</button>
+ </div>
+ `).join(""):"Sipariş yok.";
+
+ messagesList.innerHTML=messages.length?messages.map(m=>`
+ <div class="item"><b>${m.from}</b>: ${m.text}<br><small>${m.date}</small></div>
+ `).join(""):"Henüz mesaj yok.";
+
+ usersList.innerHTML=users.map(u=>`
+ <div class="item">${u.role==="admin"?"💎":"👤"} <b>${u.name}</b> / ${u.role}</div>
+ `).join("");
 }
 </script>
+
 </body>
 </html>
