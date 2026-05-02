@@ -90,6 +90,8 @@ button{cursor:pointer}
       <h2>Hoş geldin 👋</h2>
       <p>Ana sayfadaki tüm düğmeler aktif. Proje oluşturabilir, malzeme sorgulayabilir, eksikleri sipariş listesine atabilirsin.</p>
     </div>
+    <br>
+<button class="add" onclick="openMaterialModal()">+ Hızlı Malzeme Ekle</button>
   </section>
 
   <section id="materials" class="page">
@@ -193,7 +195,9 @@ function save(){
  localStorage.setItem("orders",JSON.stringify(orders));
  localStorage.setItem("messages",JSON.stringify(messages));
 }
-function code(){return Math.floor(100000+Math.random()*90000000).toString().slice(0,Math.floor(Math.random()*3)+6)}
+function code(){
+  return Math.floor(10000000 + Math.random() * 90000000).toString();
+}
 function login(){
  let f=users.find(u=>u.name===username.value.trim()&&u.pass===password.value.trim());
  if(!f)return alert("Giriş hatalı.");
